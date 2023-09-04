@@ -1,24 +1,46 @@
 # pms
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+permission level:
+1.  student
+    - view
+        - subject
+            - project
+                - announcement
+                - student
+                - assignment
+                - teacher
+                - group
+    - create
+        - announcement
+    - edit
+        - announcement `is_owner`
+        - profile
+2.  teacher
+    - view
+        - student.view
+    - create
+        - student.create
+        - project
+        - subject
+        - assignment
+        - group
+    - add
+        - student
+        - teacher
+        - group
+    - edit
+        - student.edit
+        - group
+        - student
+        - assignment
+        - teacher
+3.  admin
+    - view
+        - teacher.view
+        - system log
+    - create
+        - teacher.create
+    - add
+        - teacher.add
+    - edit
+        - teacher.edit

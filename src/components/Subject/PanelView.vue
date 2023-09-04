@@ -34,9 +34,9 @@
                 </div>
                 <div class="table-responsive table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
 
-                    <EasyDataTable :headers="headers" :items="items" :search-value="searchValue" show-index>
+                    <EasyDataTable :headers="headers" :items="items" :search-value="searchValue" table-class-name="customize-table" show-index>
                         <template #item-name="item">
-                            <router-link :to="`/project/${item.projectUUID}`">{{ item.name }}</router-link>
+                            <router-link :to="`/project/${item.subjectUUID}`">{{ item.name }}</router-link>
                         </template>
 
                         <template #item-operation="item">
@@ -44,7 +44,7 @@
                                 <button class="btn btn-primary shadow-none" @click="editItem(item)">
                                     <i class="la la-edit"></i>
                                 </button>
-                                <button class="btn btn-primary shadow-none" style="background: #e74a3b;width: 42px;" @click="editItem(item)">
+                                <button class="btn btn-primary shadow-none" style="background: #e74a3b;width: 42px;" @click="deleteItem(item)">
                                     <i class="icon ion-android-delete"></i>
                                 </button>
                             </div>
@@ -62,40 +62,49 @@
         methods: {
             exportPage() {
                 console.log("exported")
-            }
-        }
+            },
+        },
     }
 </script>
 
 <script setup>
+    import { getSubject, deleteSubject } from "@/assets/js/helper.js"
     import "vue3-easy-data-table";
-    import { ref } from "vue";
+    import { ref, onMounted } from "vue";
 
     const searchValue = ref("");
+    const items = ref([])
+
     const headers = [
-        { text: "專案名稱", value: "name" },
-        { text: "年度", value: "year" },
-        { text: "開始日期", value: "startDate" },
-        { text: "結束日期", value: "endDate" },
-        { text: "結算開始日期", value: "settlementStartDate" },
-        { text: "結算結束日期", value: "settlementEndDate" },
+        { text: "專案名稱", value: "name", sortable: true},
+        { text: "年度", value: "year", sortable: true},
+        { text: "開始日期", value: "startDate", sortable: true},
+        { text: "結束日期", value: "endDate", sortable: true},
+        { text: "結算開始日期", value: "settlementStartDate", sortable: true},
+        { text: "結算結束日期", value: "settlementEndDate", sortable: true},
         { text: "選項", value: "operation" },
     ];
 
-    const items = [
-        {
-            name: "test",
-            year: "111",
-            startDate: "11-11-2023",
-            endDate: "21-11-2023",
-            settlementStartDate: "11-11-2023",
-            settlementEndDate: "21-11-2023",
-            projectUUID: "c60cdbe4-5ecb-4845-ad85-fd6b5adc3682",
-            subjectUUID: "c60cdbe4-5ecb-4845-ad85-fd6b5adc3682",
-        },
-    ];
+    onMounted(() => {
+        getSubject().then(function array_(res) {
+            if (!Array.isArray(res)) {
+                return
+            }
+            for (const i of res) {
+                items.value.push(i)
+            }
+        });
+    })
 
     function editItem(item) {
         console.log(item);
+    }
+
+    function deleteItem(item) {
+        if (!confirm("確定刪除項目？")) {
+            return
+        }
+        items.value.splice(item.index-1)
+        deleteSubject(item.subjectUUID)
     }
 </script>

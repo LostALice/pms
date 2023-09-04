@@ -34,7 +34,7 @@
                 </div>
                 <div class="table-responsive table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
 
-                    <EasyDataTable :headers="headers" :items="items" show-index>
+                    <EasyDataTable :headers="headers" :items="items" table-class-name="customize-table" show-index>
                         <template #item-name="item">
                             <router-link :to="`${$route.path}/info/${item.groupUUID}}`">{{ item.name }} </router-link>
                         </template>

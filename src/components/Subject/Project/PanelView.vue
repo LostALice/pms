@@ -34,24 +34,24 @@
                 </div>
                 <div class="table-responsive table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
 
-                    <EasyDataTable :headers="headers" :items="items" :search-value="searchValue" show-index>
+                    <EasyDataTable :headers="headers" :items="items" :search-value="searchValue" show-index table-class-name="customize-table">
                         <template #item-name="item">
-                            <router-link :to="`/project/info/${item.projectUUID}`">{{ item.name }}</router-link>
+                            <router-link :to="`/project/info/${$router.currentRoute.value.params.subjectID}`">{{ item.name }}</router-link>
                         </template>
-                        <template #item-announcement="item">
-                            <router-link to="/announcement">{{ item.announcement }}</router-link>
+                        <template #item-announcements="item">
+                            <router-link :to="`/project/${item.projectID}/announcement`">{{ item.announcements }}</router-link>
                         </template>
                         <template #item-student="item">
-                            <router-link to="/student">{{ item.student }}</router-link>
+                            <router-link :to="`/project/${item.projectID}/student`">{{ item.student }}</router-link>
                         </template>
                         <template #item-teacher="item">
-                            <router-link to="/teacher">{{ item.teacher }}</router-link>
+                            <router-link :to="`/project/${item.projectID}/teacher`">{{ item.teacher }}</router-link>
                         </template>
                         <template #item-group="item">
-                            <router-link to="/group">{{ item.group }}</router-link>
+                            <router-link :to="`/project/${item.projectID}/group`">{{ item.group }}</router-link>
                         </template>
                         <template #item-assignment="item">
-                            <router-link to="/assignment">{{ item.assignments }}</router-link>
+                            <router-link :to="`/project/${item.projectID}/assignment`">{{ item.assignment }}</router-link>
                         </template>
 
                         <template #item-operation="item">
@@ -59,7 +59,7 @@
                                 <button class="btn btn-primary shadow-none" @click="editItem(item)">
                                     <i class="la la-edit"></i>
                                 </button>
-                                <button class="btn btn-primary shadow-none" style="background: #e74a3b;width: 42px;" @click="editItem(item)">
+                                <button class="btn btn-primary shadow-none" style="background: #e74a3b;" @click="deleteItem(item)">
                                     <i class="icon ion-android-delete"></i>
                                 </button>
                             </div>
@@ -83,35 +83,81 @@
 </script>
 
 <script setup>
+    import { getProject, deleteProject } from "@/assets/js/helper.js"
+    import { useRouter } from "vue-router"
     import "vue3-easy-data-table";
-    import { ref } from "vue";
+    import { ref, onMounted } from "vue";
 
     const searchValue = ref("");
-    const headers = [
-        { text: "項目名稱", value: "name" },
-        { text: "公告", value: "announcement" },
-        { text: "學生", value: "student" },
-        { text: "教授", value: "teacher" },
-        { text: "小組", value: "group" },
-        { text: "作業", value: "assignment" },
-        { text: "選項", value: "operation" },
-    ];
+    const items = ref([])
 
-    const items = [
+    const router = useRouter()
+    const subjectUUID = router.currentRoute.value.params.subjectID
+
+    const headers = [
         {
-            name: "test",
-            year: "111",
-            announcement: "1",
-            student: "1",
-            teacher: "1",
-            group: "1",
-            assignments: "1",
-            projectUUID: "c60cdbe4-5ecb-4845-ad85-fd6b5adc3682",
-            operation: [],
+            text: "項目名稱",
+            value: "name",
+            sortable: true
+        },
+        {
+            text: "公告",
+            value: "announcements",
+            sortable: true
+        },
+        {
+            text: "學生",
+            value: "student",
+            sortable: true
+        },
+        {
+            text: "教授",
+            value: "teacher",
+            sortable: true
+        },
+        {
+            text: "小組",
+            value: "group",
+            sortable: true
+        },
+        {
+            text: "作業",
+            value: "assignment",
+            sortable: true
+        },
+        {
+            text: "選項",
+            value: "operation",
+            sortable: true
         },
     ];
 
+    onMounted(() =>{
+        getProject(subjectUUID).then(function array_(res) {
+            console.log(res)
+            if (!Array.isArray(res)) {
+                return
+            }
+            for (const i of res) {
+                items.value.push(i)
+            }
+            console.log(res)
+        });
+    })
+
     function editItem(item) {
         console.log(item);
+    }
+
+    async function deleteItem(item) {
+        if (items.value.length == 1) {
+            alert("至少保留一個項目或刪除整個專案")
+            return
+        }
+        if (!confirm("確定刪除項目？")) {
+            return
+        }
+        items.value.splice(item.index-1)
+        await deleteProject(item.projectUUID)
     }
 </script>

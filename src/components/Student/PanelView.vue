@@ -34,7 +34,7 @@
                 </div>
                 <div class="table-responsive table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
 
-                    <EasyDataTable :headers="headers" :items="items" show-index>
+                    <EasyDataTable :headers="headers" :items="items" table-class-name="customize-table" show-index>
                         <template #item-nid="item">
                             <router-link :to="`${$route.path}/info/${item.nid}`">{{ item.nid }}</router-link>
                         </template>
@@ -68,23 +68,33 @@
 </script>
 
 <script setup>
+    import { getStudentData } from "@/assets/js/helper.js";
+    import { useRouter } from "vue-router"
+    import { ref, onMounted } from "vue";
     import "vue3-easy-data-table";
-    import { getSubjectData } from "@/assets/js/helper.js";
 
-    getSubjectData()
+    const items = ref([])
+    const projectUUID = useRouter().currentRoute.value.params.projectID
 
     const headers = [
-        { text: "NID", value: "nid" },
-        { text: "姓名", value: "name" },
-        { text: "選項", value: "operation" },
-    ];
-
-    const items = [
         {
-            nid: "D1234567",
-            name: "TyrantRey",
+            text: "NID",
+            value: "nid"
+        },
+        {
+            text: "姓名",
+            value: "name"
+        },
+        {
+            text: "選項",
+            value: "operation"
         },
     ];
+
+    onMounted(async () => {
+        const studentData = await getStudentData(projectUUID)
+        console.log(studentData);
+    })
 
     function editItem(item) {
         console.log(item);

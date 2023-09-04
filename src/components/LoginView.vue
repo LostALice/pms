@@ -1,5 +1,5 @@
 <template>
-    <section id="login-page" class="login-dark fixed-top bg-white" style="background: url('login_bg.jpg');background-size: cover;" >
+    <section id="login-page" class="login-dark fixed-top bg-white" style="backdrop-filter: blur(5px);background-size:auto;" >
         <form method="post" style="background: rgba(15,25,35,0.9);">
             <h2 class="visually-hidden">Login Form</h2>
             <div class="illustration">
@@ -83,9 +83,9 @@
                         // store jwt token to localStorage for future use
                         let nid = self.nid.toUpperCase()
                         if (response.data.access){
-                            localStorage["nid"] = nid
+                            localStorage["nid"] = nid.toLocaleUpperCase()
                             localStorage["token"] = response.data.token["x-access-token"]
-                            self.$router.go(0)
+                            self.$router.push("/dashboard")
                         }
                         else {
                             // chinese

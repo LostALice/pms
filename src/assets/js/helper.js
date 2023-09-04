@@ -60,3 +60,213 @@ export async function getTeacherInfo(target) {
     resp = await resp
     return resp.data
 }
+
+// subject
+export async function createSubject(
+    subjectName,
+    year,
+    startDate,
+    endDate,
+    settlementStartDate,
+    settlementEndDate,
+) {
+    const nid = localStorage["nid"]
+    const token = localStorage["token"]
+
+    let resp = await axios.post("/createSubject", null, {
+        params:{
+            "nid": nid,
+            "token": token,
+            "subjectName": subjectName,
+            "year": year,
+            "startDate": startDate,
+            "endDate": endDate,
+            "settlementStartDate": settlementStartDate,
+            "settlementEndDate": settlementEndDate,
+        }
+    })
+
+    resp = await resp
+    return resp.data
+}
+
+export async function getSubject() {
+    const nid = localStorage["nid"]
+    const token = localStorage["token"]
+
+    let resp = await axios.post("/getSubject", null, {
+        params:{
+            "nid": nid,
+            "token": token,
+        }
+    })
+
+    resp = await resp
+    return resp.data
+}
+
+export async function deleteSubject(subjectUUID) {
+    const nid = localStorage["nid"]
+    const token = localStorage["token"]
+
+    let resp = await axios.post("/deleteSubject", null, {
+        params:{
+            "nid": nid,
+            "token": token,
+            "subjectUUID": subjectUUID
+        }
+    })
+
+    resp = await resp
+    return resp.data
+}
+
+// project
+export async function getProject(subjectUUID) {
+    const nid = localStorage["nid"]
+    const token = localStorage["token"]
+
+    let resp = await axios.post("/getProject", null, {
+        params:{
+            "nid": nid,
+            "token": token,
+            "subjectUUID": subjectUUID
+        }
+    })
+
+    resp = await resp
+    return resp.data
+}
+
+export async function createProject(subjectUUID, projectName) {
+    const nid = localStorage["nid"]
+    const token = localStorage["token"]
+
+    let resp = await axios.post("/createProject", null, {
+        params:{
+            "nid": nid,
+            "token": token,
+            "subjectUUID": subjectUUID,
+            "projectName": projectName
+        }
+    })
+
+    resp = await resp
+    return resp.data
+}
+
+export async function deleteProject(projectUUID) {
+    const nid = localStorage["nid"]
+    const token = localStorage["token"]
+
+    let resp = await axios.post("/deleteProject", null, {
+        params:{
+            "nid": nid,
+            "token": token,
+            "projectUUID": projectUUID
+        }
+    })
+
+    resp = await resp
+    return resp.data
+}
+
+export async function getProjectInfo(projectUUID) {
+    const nid = localStorage["nid"]
+    const token = localStorage["token"]
+
+    let resp = await axios.post("/getProjectInfo", null, {
+        params:{
+            "nid": nid,
+            "token": token,
+            "projectUUID": projectUUID
+        }
+    })
+
+    resp = await resp
+    return resp.data
+}
+
+// announcement
+export async function getAnnouncementData(projectUUID) {
+    const nid = localStorage["nid"]
+    const token = localStorage["token"]
+
+    let resp = await axios.post("/getAnnouncementData", null, {
+        params:{
+            "nid": nid,
+            "token": token,
+            "projectUUID": projectUUID,
+        }
+    })
+
+    resp = await resp
+    return resp.data
+}
+
+export async function newAnnouncement(projectUUID, title, context) {
+    const nid = localStorage["nid"]
+    const token = localStorage["token"]
+
+    let resp = await axios.post("/createAnnouncement", null, {
+        params:{
+            "nid": nid,
+            "token": token,
+            "projectUUID": projectUUID,
+            "title": title,
+            "context": context
+        }
+    })
+
+    resp = await resp
+    return resp.data
+}
+
+export async function getAnnouncementInfo(announcementUUID) {
+    const nid = localStorage["nid"]
+    const token = localStorage["token"]
+
+    let resp = await axios.post("/getAnnouncementInfo", null, {
+        params:{
+            "nid": nid,
+            "token": token,
+            "announcementUUID": announcementUUID,
+        }
+    })
+
+    resp = await resp
+    return resp.data
+}
+
+export async function deleteAnnouncement(announcementUUID) {
+    const nid = localStorage["nid"]
+    const token = localStorage["token"]
+
+    let resp = await axios.post("/deleteAnnouncement", null, {
+        params:{
+            "nid": nid,
+            "token": token,
+            "announcementUUID": announcementUUID
+        }
+    })
+
+    resp = await resp
+    return resp.data
+}
+
+// student
+export async function getStudentData(projectUUID) {
+    const nid = localStorage["nid"]
+    const token = localStorage["token"]
+
+    let resp = await axios.post("/getStudentData", null, {
+        params:{
+            "nid": nid,
+            "token": token,
+            "projectUUID": projectUUID
+        }
+    })
+
+    resp = await resp
+    return resp.data
+}

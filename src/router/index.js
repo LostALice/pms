@@ -7,7 +7,7 @@ const routes = [
     // login page
     {
         path: "/",
-        name: "LoginView-none",
+        name: "Login",
         component: () => import("@/components/LoginView.vue")
     },
     {
@@ -29,22 +29,22 @@ const routes = [
     },
     // Teacher page
     {
-        path: "/teacher",
+        path: "/project/:projectID/teacher",
         name: "教授",
         component: () => import("@/components/Teacher/PanelView.vue"),
     },
     {
-        path: "/teacher/import",
+        path: "/project/:projectID/teacher/import",
         name: "導入教授",
         component: () => import("@/components/Teacher/ImportView.vue"),
     },
     {
-        path: "/teacher/:TeacherID",
+        path: "/project/:projectID/teacher/:teacherID",
         name: "教授資訊",
         component: () => import("@/components/Teacher/InfoView.vue"),
     },
     {
-        path: "/teacher/new",
+        path: "/project/:projectID/teacher/new",
         name: "新增教授",
         component: () => import("@/components/Teacher/NewView.vue"),
     },
@@ -54,98 +54,103 @@ const routes = [
         name: "專案",
         component: () => import("@/components/Subject/PanelView.vue"),
     },
+    {
+        path: "/subject/new",
+        name: "新增專案",
+        component: () => import("@/components/Subject/NewView.vue"),
+    },
     // Group page
     {
-        path: "/group",
+        path: "/project/:projectID/group",
         name: "小組",
         component: () => import("@/components/Group/PanelView.vue"),
     },
     {
-        path: "/group/new",
+        path: "/project/:projectID/group/new",
         name: "新增小組",
         component: () => import("@/components/Group/NewView.vue"),
     },
     {
-        path: "/group/info/:groupID",
+        path: "/project/:projectID/group/info/:groupID",
         name: "小組資訊",
         component: () => import("@/components/Group/InfoView.vue"),
     },
     // Announcements page
     {
-        path: "/announcement",
+        path: "/project/:projectID/announcement",
         name: "公告",
         component: () => import("@/components/Announcements/PanelView.vue"),
     },
     {
-        path: "/announcement/new",
+        path: "/project/:projectID/announcement/new",
         name: "新增公告",
         component: () => import("@/components/Announcements/NewView.vue"),
     },
     {
-        path: "/announcement/info/:announcementID",
+        path: "/project/:projectID/announcement/info/:announcementID",
         name: "公告內容",
         component: () => import("@/components/Announcements/InfoView.vue"),
     },
     // Assignment page
     {
-        path: "/assignment",
+        path: "/project/:projectID/assignment",
         name: "作業",
         component: () => import("@/components/Assignment/PanelView.vue"),
     },
     {
-        path: "/assignment/new",
+        path: "/project/:projectID/assignment/new",
         name: "新增作業",
         component: () => import("@/components/Assignment/NewView.vue"),
     },
     {
-        path: "/assignment/info/:assignmentID",
+        path: "/project/:projectID/assignment/info/:assignmentID",
         name: "作業資訊",
         component: () => import("@/components/Assignment/InfoView.vue"),
     },
     {
-        path: "/assignment/submitted",
+        path: "/project/:projectID/assignment/submitted",
         name: "己提交作業",
         component: () => import("@/components/Assignment/Submitted/PanelView.vue"),
     },
     {
-        path: "/assignment/submitted/:AssignmentID",
+        path: "/project/:projectID/assignment/submitted/:assignmentID",
         name: "己提交作業內容",
         component: () => import("@/components/Assignment/Submitted/InfoView.vue"),
     },
     // project page
     {
-        path: "/project/:projectID",
+        path: "/project/:subjectID",
         name: "項目",
         component: () => import("@/components/Subject/Project/PanelView.vue"),
     },
-    // {
-    //     path: "/project/new",
-    //     name: "新增項目",
-    //     component: () => import("@/components/Subject/Project/NewView.vue"),
-    // },
     {
-            path: "/project/info/:projectID",
+        path: "/project/:subjectID/new",
+        name: "新增項目",
+        component: () => import("@/components/Subject/Project/NewView.vue"),
+    },
+    {
+            path: "/project/info/:subjectID",
             name: "項目內容",
             component: () => import("@/components/Subject/Project/InfoView.vue"),
     },
     // Student page
     {
-        path: "/student",
+        path: "/project/:projectID/student",
         name: "學生",
         component: () => import("@/components/Student/PanelView.vue"),
     },
     {
-        path: "/student/info/:StudentID",
+        path: "/project/:projectID/student/info/:studentID",
         name: "學生資訊",
         component: () => import("@/components/Student/InfoView.vue"),
     },
     {
-        path: "/student/import",
+        path: "/project/:projectID/student/import",
         name: "導入學生",
         component: () => import("@/components/Student/ImportView.vue"),
     },
     {
-        path: "/student/new",
+        path: "/project/:projectID/student/new",
         name: "新增學生",
         component: () => import("@/components/Student/NewView.vue"),
     },
@@ -153,7 +158,7 @@ const routes = [
     {
         path: "/404",
         name: "404 Not Found",
-        component: () => import("@/components/403.vue"),
+        component: () => import("@/components/404.vue"),
     },
     // 403 page
     {

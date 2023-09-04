@@ -33,6 +33,7 @@
                     </li>
                 </ul>
                 <hr class="sidebar-divider my-0">
+
             </div>
         </nav>
 
@@ -147,7 +148,7 @@
             alert("Timeout: Token Expired")
         }
 
-        const sp_page = ["/", "/login", "/404"]
+        const sp_page = ["/", "/login", "/404", "/403"]
 
         if (sp_page.includes(path)) {
             let FixedTop = ref(false)
@@ -159,13 +160,16 @@
 </script>
 
 <style>
-    .fade-enter-from,
-    .fade-leave-to {
+    .fade-enter-from, .fade-leave-to {
         opacity: 0;
     }
 
-    .fade-enter-active,
-    .fade-leave-active {
+    .fade-enter-active, .fade-leave-active {
         transition: opacity 0.1s ease-out ;
+    }
+
+    .customize-table {
+        --easy-table-header-font-size: 24px;
+        --easy-table-body-row-font-size: 18px;
     }
 </style>

@@ -34,7 +34,7 @@
                 </div>
                 <div class="table-responsive table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
 
-                    <EasyDataTable :headers="headers" :items="items" show-index>
+                    <EasyDataTable :headers="headers" :items="items" table-class-name="customize-table" show-index>
                         <template #item-title="item">
                             <router-link :to="`/assignment/info/${item.assignmentUUID}}`">{{ item.title }} </router-link>
                         </template>
@@ -74,11 +74,12 @@
     getSubjectData()
 
     const headers = [
-        { text: "標題", value: "title" },
-        { text: "小組", value: "group" },
-        { text: "上傳者", value: "uploader" },
-        { text: "日期", value: "date" },
-        { text: "選項", value: "operation" },
+        { text: "標題", value: "title", sortable: true},
+        { text: "小組", value: "group", sortable: true},
+        { text: "上傳者", value: "uploader", sortable: true},
+        { text: "日期", value: "date", sortable: true},
+        { text: "狀態", value: "status", sortable: true},
+        { text: "選項", value: "operation", sortable: true},
     ];
 
     const items = [
@@ -86,8 +87,17 @@
             title: "test",
             group: "Alice",
             uploader: "TyrantRey",
-            date: "22-8-2023", sortable: true ,
+            date: "22-8-2023",
+            status: "Submitted",
             assignmentUUID: "f05dba41-a33f-4dc0-ad0f-c38ff58f1261"
+        },
+        {
+            title: "test2",
+            group: "Alice",
+            uploader: "TyrantRey",
+            date: "22-8-2023",
+            status: "Not Submitted",
+            assignmentUUID: "f05dba41-a33f-4dc0-ad0f-c38ff58f1262"
         },
     ];
 

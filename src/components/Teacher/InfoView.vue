@@ -28,7 +28,7 @@
     </div>
 </template>
 
-<script>
+<!-- <script>
     import { getTeacherInfo } from "@/assets/js/helper.js"
 
 
@@ -43,9 +43,25 @@
 
             this.nid = this.$route.params.TeacherID
 
-            var name = getTeacherInfo(this.nid)
+            const name = getTeacherInfo(this.nid)
             this.name = await name
             // console.log(this.$route.params.TeacherID)
         }
     }
+</script> -->
+
+
+<script setup>
+    import { getTeacherInfo } from "@/assets/js/helper.js"
+    import { useRouter } from "vue-router"
+    import { ref, onMounted } from "vue"
+
+    const nid = useRouter().params.TeacherID
+    const name = ref("")
+
+    onMounted(async () => {
+        const info = await getTeacherInfo(nid)
+        name.value = info
+    })
+
 </script>

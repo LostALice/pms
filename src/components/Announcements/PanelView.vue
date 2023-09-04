@@ -32,9 +32,9 @@
                         </div>
                     </div>
                 </div>
-                <EasyDataTable :headers="headers" :items="items" show-index>
+                <EasyDataTable :headers="headers" :items="items" table-class-name="customize-table" show-index>
                     <template #item-title="item">
-                        <router-link :to="`/assignment/info/${item.assignmentUUID}}`">{{ item.title }} </router-link>
+                        <router-link :to="`${$route.path}/info/${item.announcementUUID}`">{{ item.title }} </router-link>
                     </template>
 
                     <template #item-operation="item">
@@ -42,7 +42,7 @@
                             <button class="btn btn-primary shadow-none" @click="editItem(item)">
                                 <i class="la la-edit"></i>
                             </button>
-                            <button class="btn btn-primary shadow-none" style="background: #e74a3b;width: 42px;" @click="editItem(item)">
+                            <button class="btn btn-primary shadow-none" style="background: #e74a3b;width: 42px;" @click="deleteItem(item)">
                                 <i class="icon ion-android-delete"></i>
                             </button>
                         </div>
@@ -59,28 +59,55 @@
 </script>
 
 <script setup>
+    import { getAnnouncementData, deleteAnnouncement } from "@/assets/js/helper.js"
+    import { useRouter } from "vue-router"
+    import { ref, onMounted } from "vue";
     import "vue3-easy-data-table";
-    import { getSubjectData } from "@/assets/js/helper.js";
-
-    getSubjectData()
 
     const headers = [
-        { text: "標題", value: "title" },
-        { text: "作者", value: "author" },
-        { text: "最後修改日期", value: "date" },
-        { text: "選項", value: "operation" },
-    ];
-
-    const items = [
         {
-            title: "test",
-            author: "TyrantRey",
-            date: "22-8-2023", sortable: true ,
-            announcementsUUID: "f05dba41-a33f-4dc0-ad0f-c38ff58f1261"
+            text: "標題",
+            value: "title",
+            sortable: true
+        },
+        {
+            text: "作者",
+            value: "author",
+            sortable: true
+        },
+        {
+            text: "最後修改日期",
+            value: "date",
+            sortable: true
+        },
+        {
+            text: "選項",
+            value: "operation",
+            sortable: true
         },
     ];
+
+    const items = ref([])
+    const projectUUID = useRouter().currentRoute.value.params.projectID
+
+    onMounted(async () => {
+        const data = await getAnnouncementData(projectUUID)
+        for (const i of data) {
+            items.value.push(i)
+        }
+    })
 
     function editItem(item) {
         console.log(item);
     }
+
+    async function deleteItem(item) {
+        if (!confirm("確定刪除項目？")) {
+            return
+        }
+        items.value.splice(item.index-1)
+        await deleteAnnouncement(item.announcementUUID)
+    }
+
+
 </script>
