@@ -26,7 +26,7 @@ export async function verifyLoginTimeout() {
             "token": token,
         }
     })
-    resp = await resp
+
     return resp.data.timeout
 }
 
@@ -42,7 +42,7 @@ export async function getSubjectData() {
             "token": token,
         }
     })
-    resp = await resp
+
     return resp.data.timeout
 }
 
@@ -71,7 +71,7 @@ export async function createSubject(
         }
     })
 
-    resp = await resp
+
     return resp.data
 }
 
@@ -86,7 +86,6 @@ export async function getSubject() {
         }
     })
 
-    resp = await resp
     return resp.data
 }
 
@@ -102,7 +101,6 @@ export async function deleteSubject(subjectUUID) {
         }
     })
 
-    resp = await resp
     return resp.data
 }
 
@@ -119,7 +117,6 @@ export async function getProject(subjectUUID) {
         }
     })
 
-    resp = await resp
     return resp.data
 }
 
@@ -136,7 +133,7 @@ export async function createProject(subjectUUID, projectName) {
         }
     })
 
-    resp = await resp
+
     return resp.data
 }
 
@@ -152,7 +149,7 @@ export async function deleteProject(projectUUID) {
         }
     })
 
-    resp = await resp
+
     return resp.data
 }
 
@@ -168,7 +165,7 @@ export async function getProjectInfo(projectUUID) {
         }
     })
 
-    resp = await resp
+
     return resp.data
 }
 
@@ -185,7 +182,7 @@ export async function getAnnouncementData(projectUUID) {
         }
     })
 
-    resp = await resp
+
     return resp.data
 }
 
@@ -203,7 +200,7 @@ export async function newAnnouncement(projectUUID, title, context) {
         }
     })
 
-    resp = await resp
+
     return resp.data
 }
 
@@ -219,11 +216,11 @@ export async function getAnnouncementInfo(announcementUUID) {
         }
     })
 
-    resp = await resp
+
     return resp.data
 }
 
-export async function deleteAnnouncement(announcementUUID) {
+export async function deleteAnnouncement(projectUUID, announcementUUID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
@@ -231,11 +228,12 @@ export async function deleteAnnouncement(announcementUUID) {
         params:{
             "nid": nid,
             "token": token,
+            "projectUUID": projectUUID,
             "announcementUUID": announcementUUID
         }
     })
 
-    resp = await resp
+
     return resp.data
 }
 
@@ -252,7 +250,7 @@ export async function getStudentData(projectUUID) {
         }
     })
 
-    resp = await resp
+
     return resp.data
 }
 
@@ -268,7 +266,7 @@ export async function getStudentList(projectUUID) {
         }
     })
 
-    resp = await resp
+
     return resp.data
 }
 
@@ -285,7 +283,7 @@ export async function newStudent(studentNID, projectUUID) {
         }
     })
 
-    resp = await resp
+
     return resp.data
 }
 
@@ -301,7 +299,7 @@ export async function getStudentInfo(studentNID) {
         }
     })
 
-    resp = await resp
+
     return resp.data
 }
 
@@ -318,7 +316,7 @@ export async function deleteStudent(studentNID, projectUUID) {
         }
     })
 
-    resp = await resp
+
     return resp.data
 }
 
@@ -335,7 +333,7 @@ export async function getTeacherData(projectUUID) {
         }
     })
 
-    resp = await resp
+
     return resp.data
 }
 
@@ -367,7 +365,7 @@ export async function newTeacher(teacherNID, projectUUID) {
         }
     })
 
-    resp = await resp
+
     return resp.data
 }
 
@@ -383,7 +381,7 @@ export async function getTeacherInfo(teacherNID) {
         }
     })
 
-    resp = await resp
+
     return resp.data
 }
 
@@ -400,7 +398,7 @@ export async function deleteTeacher(teacherNID, projectUUID) {
         }
     })
 
-    resp = await resp
+
     return resp.data
 }
 
@@ -417,7 +415,7 @@ export async function getGroupData(projectUUID) {
         }
     })
 
-    resp = await resp
+
     return resp.data
 }
 
@@ -433,7 +431,7 @@ export async function getGroupInfo(groupUUID) {
         }
     })
 
-    resp = await resp
+
     return resp.data
 }
 
@@ -449,7 +447,6 @@ export async function getGroupTeacherData(projectUUID) {
         }
     })
 
-    resp = await resp
     return resp.data
 }
 
@@ -465,7 +462,7 @@ export async function getGroupStudentData(projectUUID) {
         }
     })
 
-    resp = await resp
+
     return resp.data
 }
 
@@ -484,7 +481,6 @@ export async function newGroup(projectUUID, member, group_name, GID) {
         }
     })
 
-    resp = await resp
     return resp.data
 }
 
@@ -576,7 +572,7 @@ export async function downloadAssignment(taskUUID, fileID) {
     return resp.data
 }
 
-export async function markAssignmentScore(taskUUID, assignmentUUID, marks) {
+export async function markAssignmentScore(taskUUID, projectUUID, marks) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
@@ -585,8 +581,26 @@ export async function markAssignmentScore(taskUUID, assignmentUUID, marks) {
             "nid": nid,
             "token": token,
             "taskUUID": taskUUID,
-            "assignmentUUID": assignmentUUID,
+            "projectUUID": projectUUID,
             "marks": marks
+        }
+    })
+    return resp.data
+}
+
+export async function newAssignment(projectUUID, gid, name, weight, date) {
+    const nid = localStorage["nid"]
+    const token = localStorage["token"]
+
+    let resp = await axios.post("/newAssignment", null, {
+        params:{
+            "nid": nid,
+            "token": token,
+            "projectUUID": projectUUID,
+            "gid": gid,
+            "name": name,
+            "weight": weight,
+            "date": date,
         }
     })
     return resp.data

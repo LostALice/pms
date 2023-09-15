@@ -103,7 +103,7 @@
             endDate.value,
             settlementStartDate.value,
             settlementEndDate.value
-        ).then((res) => (res))
+        )
 
         router.push(`/project/${submit.subjectUUID}`)
     }

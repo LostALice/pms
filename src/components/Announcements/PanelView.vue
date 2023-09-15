@@ -92,6 +92,9 @@
 
     onMounted(async () => {
         const data = await getAnnouncementData(projectUUID)
+        if (!Array.isArray(data)) {
+            return
+        }
         for (const i of data) {
             items.value.push(i)
         }
@@ -106,7 +109,7 @@
             return
         }
         items.value.splice(item.index-1, 1)
-        await deleteAnnouncement(item.announcementUUID)
+        await deleteAnnouncement(projectUUID, item.announcementUUID)
     }
 
 

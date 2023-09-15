@@ -72,16 +72,6 @@
     </div>
 </template>
 
-<script>
-    export default {
-        methods: {
-            exportPage() {
-                console.log("exported")
-            }
-        }
-    }
-</script>
-
 <script setup>
     import { getProject, deleteProject } from "@/assets/js/helper.js"
     import { useRouter } from "vue-router"
@@ -132,17 +122,14 @@
         },
     ];
 
-    onMounted(() =>{
-        getProject(subjectUUID).then(function array_(res) {
-            console.log(res)
-            if (!Array.isArray(res)) {
-                return
-            }
-            for (const i of res) {
-                items.value.push(i)
-            }
-            console.log(res)
-        });
+    onMounted(async () =>{
+        const data = await getProject(subjectUUID)
+        if (!Array.isArray(data)) {
+            return
+        }
+        for (const i of data) {
+            items.value.push(i)
+        }
     })
 
     function editItem(item) {

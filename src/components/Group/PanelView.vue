@@ -96,15 +96,13 @@
     ];
 
     onMounted(async () => {
-        console.log(projectUUID)
-        const groupData = await getGroupData(projectUUID)
-        if (groupData.status_code == 403) {
+        const data = await getGroupData(projectUUID)
+        if (!Array.isArray(data)) {
             return
         }
-        for (const i of groupData) {
+        for (const i of data) {
             items.value.push(i)
         }
-        console.log(groupData);
     })
 
     function editItem(item) {

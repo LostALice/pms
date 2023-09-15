@@ -82,11 +82,11 @@
     ];
 
     onMounted(async () => {
-        const teacherData = await getTeacherData(projectUUID)
-        if (!Array.isArray(teacherData)) {
-                return
-            }
-        for (const i of teacherData) {
+        const data = await getTeacherData(projectUUID)
+        if (!Array.isArray(data)) {
+            return
+        }
+        for (const i of data) {
             items.value.push(i)
         }
     })

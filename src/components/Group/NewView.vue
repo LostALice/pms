@@ -142,10 +142,10 @@
         const teacherList = await getGroupTeacherData(projectUUID)
         const studentList = await getGroupStudentData(projectUUID)
 
-        if (teacherList.status_code == 403) {
+        if (!Array.isArray(teacherList)) {
             return
         }
-        if (studentList.status_code == 403) {
+        if (!Array.isArray(studentList)) {
             return
         }
 

@@ -57,16 +57,6 @@
     </div>
 </template>
 
-<script>
-    export default {
-        methods: {
-            exportPage() {
-                console.log("exported")
-            },
-        },
-    }
-</script>
-
 <script setup>
     import { getSubject, deleteSubject } from "@/assets/js/helper.js"
     import "vue3-easy-data-table";
@@ -76,24 +66,51 @@
     const items = ref([])
 
     const headers = [
-        { text: "專案名稱", value: "name", sortable: true},
-        { text: "年度", value: "year", sortable: true},
-        { text: "開始日期", value: "startDate", sortable: true},
-        { text: "結束日期", value: "endDate", sortable: true},
-        { text: "結算開始日期", value: "settlementStartDate", sortable: true},
-        { text: "結算結束日期", value: "settlementEndDate", sortable: true},
-        { text: "選項", value: "operation" },
+        {
+            text: "專案名稱",
+            value: "name",
+            sortable: true
+        },
+        {
+            text: "年度",
+            value: "year",
+            sortable: true
+        },
+        {
+            text: "開始日期",
+            value: "startDate",
+            sortable: true
+        },
+        {
+            text: "結束日期",
+            value: "endDate",
+            sortable: true
+        },
+        {
+            text: "結算開始日期",
+            value: "settlementStartDate",
+            sortable: true
+        },
+        {
+            text: "結算結束日期",
+            value: "settlementEndDate",
+            sortable: true
+        },
+        {
+            text: "選項",
+            value: "operation"
+        },
     ];
 
-    onMounted(() => {
-        getSubject().then(function array_(res) {
-            if (!Array.isArray(res)) {
-                return
-            }
-            for (const i of res) {
-                items.value.push(i)
-            }
-        });
+
+    onMounted(async () => {
+        const data = await getSubject()
+        if (!Array.isArray(data)) {
+            return
+        }
+        for (const i of data) {
+            items.value.push(i)
+        }
     })
 
     function editItem(item) {

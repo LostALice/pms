@@ -2,7 +2,19 @@
     <div>
         <div class="card shadow mb-3">
             <div class="card-header py-3">
-                <p class="text-primary m-0 fw-bold" style="font-size: 28px;">{{ $route.name }}</p>
+                <div class="row">
+                    <div class="col-md-6 text-nowrap">
+                        <p class="text-primary m-0 fw-bold" style="font-size: 28px;">{{ $route.name }}</p>
+                    </div>
+                    <div class="col-md-6 text-md-end dataTables_filter mt-1">
+                        <div class="btn-group" role="group">
+                            <button @click="markScore" class="btn btn-primary btn-sm d-none d-sm-inline-block shadow-none" role="button">
+                                <i class="icon ion-clipboard"></i>
+                                評分
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="col">
@@ -65,8 +77,9 @@
 
                         <template #item-operation="item">
                             <div class="btn-group" role="group">
-                                <button class="btn btn-primary shadow-none" @click="markScore(item)">
-                                    <i class="la la-edit"></i>
+                                <button class="btn btn-primary shadow-none" style="background: #e74a3b;width: 42px;" @click="deleteItem(item)">
+                                    <i class="icon ion-android-delete"></i>
+
                                 </button>
                             </div>
                         </template>
@@ -86,7 +99,6 @@
 
     const name = ref("")
     const group = ref("")
-    const uploader = ref("")
     const mark = ref("")
     const weight = ref("")
     const date = ref("")
@@ -119,12 +131,10 @@
     ]
 
     onMounted(async () => {
-        console.log(name.value, group.value, uploader.value, mark.value, weight.value);
         const info = await getAssignmentInfo(projectUUID, assignmentUUID)
         if (info.status_code == 403) {
             return
         }
-        console.log(info)
         name.value = info.assignment_name
         group.value = info.group_name
         mark.value = info.mark
@@ -133,19 +143,24 @@
         items.value = info.assignment_file
     })
 
-    function markScore(item) {
-        console.log(item)
+    function markScore() {
         const marks = parseInt(prompt("分數","1-100"))
+        if (!marks) {
+            alert("輸入錯誤")
+            markScore()
+        }
         if (marks <= 0 || marks > 100) {
             alert("輸入錯誤")
-            return
+            markScore()
         }
-        console.log(marks)
-        markAssignmentScore(item.taskUUID, assignmentUUID, marks)
+        if (confirm("提交分數後學生不能再提交作業\n是否確定?")) {
+            markAssignmentScore(assignmentUUID, projectUUID, marks)
+            mark.value = marks
+            alert("提交成功")
+        }
     }
 
     async function download(item) {
-        console.log(item.taskID, item.fileID, item.filename)
         const fileExtension = item.filename.split(".").pop();
 
         let fileData = await downloadAssignment(item.taskID, item.fileID, item.filename)
@@ -159,5 +174,9 @@
 
         a.click();
         a.remove();
+    }
+
+    function deleteItem(item) {
+        console.log(item);
     }
 </script>

@@ -115,11 +115,11 @@
     const items = ref([])
 
     onMounted(async () => {
-        const assignment = await getAssignment(projectUUID)
-        if (assignment.status_code == 403) {
+        const data = await getAssignment(projectUUID)
+        if (!Array.isArray(data)) {
             return
         }
-        for (const i of assignment) {
+        for (const i of data) {
             items.value.push(i)
         }
     });
@@ -129,7 +129,6 @@
             return
         }
         items.value.splice(item.index-1, 1)
-        console.log(item);
         deleteAssignment(item.assignmentUUID, projectUUID)
     }
 
