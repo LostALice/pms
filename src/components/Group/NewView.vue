@@ -8,87 +8,166 @@
                     </div>
                     <div class="col-md-6 text-md-end dataTables_filter mt-1">
                         <div class="btn-group" role="group">
-                            <router-link :to="`${$route.path}/new`" class="btn btn-primary btn-sm d-none d-sm-inline-block shadow-none" role="button">
-                                <i class="fas fa-plus-circle fa-sm text-white-50"></i>
-                                新增
-                            </router-link>
-                            <button @click="exportPage" class="btn btn-primary btn-sm d-none d-sm-inline-block shadow-none" role="button">
-                                <i class="fas fa-download fa-sm text-white-50"></i>
-                                匯出
+                            <button class="btn btn-primary btn-sm d-none d-sm-inline-block shadow-none" role="button" @click="saveGroup">
+                                <i class="fas fa-save fa-sm text-white-50"></i> 保存
                             </button>
                         </div>
                     </div>
                 </div>
+
             </div>
             <div class="card-body mh-100">
-                <form>
+                <div class="row">
+                    <div class="col col-4">
+                        <p style="font-size: 24px;">小組名稱</p>
+                    </div>
+                    <div class="col">
+                        <input class="form-control w-100 shadow-none" :class="!groupName ? 'alert-danger border-danger': ''" type="text" v-model="groupName">
+                        <span :style="groupName ? 'visibility:hidden': ''" class="tooltiptext">*必需項目</span>
+                    </div>
+                </div>
+                <hr>
+                <div>
                     <div class="row">
                         <div class="col">
-                            <div class="container mw-100 h-100">
-                                <div class="row">
-                                    <div class="col col-4">
-                                        <p style="font-size: 24px;">小組名稱</p>
-                                    </div>
-                                    <div class="col"><input class="form-control w-100 shadow-none" type="text"></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col col-4">
-                                        <p style="font-size: 24px;">教授</p>
-                                    </div>
-                                    <div class="col"><input class="form-control w-100 shadow-none" type="number"></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <hr>
-                                    </div>
-                                </div>
+                            <div class="col text-center align-middle">
+                                <p class="lead" style="font-size: 24px;">可選擇教授</p>
                             </div>
-                        </div>
-                    </div></form>
-                    <div class="row">
-                        <div class="col-xxl-5 text-center align-middle">
-                            <p class="lead" style="font-size: 24px;">Selectable student</p>
-                        </div>
-                        <div class="col-xxl-5 offset-xxl-2 text-center align-middle">
-                            <p class="lead" style="font-size: 24px;">Selected student</p>
+                            <div class="col text-center align-middle">
+                                <input type="text" class="form-control shadow-none" v-model="teacherSearchValue" placeholder="搜尋">
+                            </div>
+                            <EasyDataTable
+                            :headers="Headers"
+                            :items="teacherItems"
+                            v-model:items-selected="teacherSelected"
+                            show-index
+                            :search-value="teacherSearchValue"
+                            >
+                        </EasyDataTable>
+                    </div>
+                        <div class="col">
+                            <div class="col text-center align-middle">
+                                <p class="lead" style="font-size: 24px;">已選教授</p>
+                            </div>
+                            <div class="col text-center align-middle">
+                                <input type="text" class="form-control shadow-none" v-model="teacherSelectSearchValue" placeholder="搜尋">
+                            </div>
+                            <EasyDataTable
+                                :headers="Headers"
+                                :items="teacherSelected"
+                                show-index
+                                :search-value="teacherSelectSearchValue">
+                            </EasyDataTable>
                         </div>
                     </div>
+                </div>
+                <br>
+                <div>
                     <div class="row">
-                        <div class="col text-center align-middle"><input class="form-control form-control shadow-none" type="text"></div>
-                        <div class="col-xxl-2 text-center pt-2">
-                            <p class="lead" style="font-size: 18px;">Search</p>
+
+                        <div class="col">
+                            <div class="col text-center align-middle">
+                                <p class="lead" style="font-size: 24px;">可選擇學生</p>
+                            </div>
+                            <div class="col text-center align-middle">
+                                <input type="text" class="form-control shadow-none" v-model="studentSearchValue" placeholder="搜尋">
+                            </div>
+                            <EasyDataTable
+                                :headers="Headers"
+                                :items="studentItems"
+                                v-model:items-selected="studentSelected"
+                                show-index
+                                :search-value="studentSearchValue"
+                            >
+                            </EasyDataTable>
                         </div>
-                        <div class="col text-center align-middle"><input class="form-control form-control shadow-none" type="text"></div>
+
+                        <div class="col">
+                            <div class="col text-center align-middle">
+                                <p class="lead" style="font-size: 24px;">已選學生</p>
+                            </div>
+                            <div class="col text-center align-middle">
+                                <input type="text" class="form-control shadow-none" v-model="studentSelectSearchValue" placeholder="搜尋">
+                            </div>
+                            <EasyDataTable
+                                :headers="Headers"
+                                :items="studentSelected"
+                                show-index
+                                :search-value="studentSelectSearchValue">
+                            </EasyDataTable>
+                        </div>
                     </div>
-                    <div class="row">
-                        <div class="col"><select class="form-select form-select-lg mx-0" size="20" multiple="" style="width: 100%;height: 100%;">
-                                <optgroup label="This is a group">
-                                    <option value="12" selected="">This is item 1</option>
-                                    <option value="13">This is item 2</option>
-                                    <option value="14">This is item 3</option>
-                                </optgroup>
-                            </select></div>
-                        <div class="col-xxl-2 text-center border-start-warning">
-                            <p class="lead mt-3" style="font-size: 18px;">Select all</p>
-                            <div class="btn-group w-100" role="group"><button class="btn btn-primary shadow-none" type="button"><i class="fa fa-angle-double-left"></i></button><button class="btn btn-primary shadow-none" type="button"><i class="fa fa-angle-double-right"></i></button></div>
-                            <p class="lead mt-3" style="font-size: 18px;">Select selected</p>
-                            <div class="btn-group w-100" role="group"><button class="btn btn-primary shadow-none" type="button"><i class="fa fa-angle-left"></i></button><button class="btn btn-primary shadow-none" type="button"><i class="fa fa-angle-right"></i></button></div>
-                            <div class="btn-group w-100" role="group"><button class="btn btn-primary shadow-none my-3" type="button"><i class="fa fa-minus-square-o"></i>&nbsp;Clear</button><button class="btn btn-primary shadow-none my-3" type="button"><i class="fa fa-save"></i>&nbsp;Save</button></div>
-                        </div>
-                        <div class="col"><select class="form-select form-select-lg" size="20" multiple="" style="width: 100%;height: 100%;">
-                                <optgroup label="This is a group">
-                                    <option value="12" selected="">This is item 1</option>
-                                    <option value="13">This is item 2</option>
-                                    <option value="14">This is item 3</option>
-                                </optgroup>
-                            </select>
-                        </div>
-                    </div>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
-<script>
+<script setup>
+    import { getGroupTeacherData, getGroupStudentData, newGroup, getGroupToken } from "@/assets/js/helper.js"
+    import { useRouter } from "vue-router"
+    import { ref, onMounted } from "vue"
+    import "vue3-easy-data-table"
 
+    const router = useRouter()
+    const projectUUID = router.currentRoute.value.params.projectID
+    const groupName = ref("")
+
+    const teacherSearchValue = ref("")
+    const studentSearchValue = ref("")
+
+    const teacherSelected = ref([]);
+    const studentSelected = ref([]);
+
+    const teacherItems = ref([])
+    const studentItems = ref([]);
+
+    const Headers = [
+        {
+            text: "NID",
+            value: "nid",
+            sortable: true,
+        },
+        {
+            text: "姓名",
+            value: "name",
+            sortable: true,
+        },
+    ];
+
+    const teacherSelectSearchValue = ref("")
+    const studentSelectSearchValue = ref("")
+
+    onMounted(async () => {
+        const teacherList = await getGroupTeacherData(projectUUID)
+        const studentList = await getGroupStudentData(projectUUID)
+
+        if (teacherList.status_code == 403) {
+            return
+        }
+        if (studentList.status_code == 403) {
+            return
+        }
+
+        teacherItems.value = teacherList
+        studentItems.value = studentList
+    })
+
+
+    async function saveGroup() {
+        if (teacherSelected.value == []) {
+            alert("必須選擇至少一名教授")
+        }
+        if (!groupName.value) {
+            return
+        }
+        const GID = await getGroupToken()
+        console.log(GID);
+        for (const i of teacherSelected.value) {
+            newGroup(projectUUID, i.nid, groupName.value, GID.GID)
+        }
+        for (const i of studentSelected.value) {
+            newGroup(projectUUID, i.nid, groupName.value, GID.GID)
+        }
+    }
 </script>

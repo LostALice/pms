@@ -1,6 +1,6 @@
-import { createRouter, createWebHashHistory } from "vue-router"
+// Code by AkinoAlice@Tyrant_Rex
 
-import Not_found from "@/components/404.vue"
+import { createRouter, createWebHashHistory } from "vue-router"
 
 // using dynamic routes
 const routes = [
@@ -8,6 +8,7 @@ const routes = [
     {
         path: "/",
         name: "Login",
+        redirect: "/login",
         component: () => import("@/components/LoginView.vue")
     },
     {
@@ -39,7 +40,7 @@ const routes = [
         component: () => import("@/components/Teacher/ImportView.vue"),
     },
     {
-        path: "/project/:projectID/teacher/:teacherID",
+        path: "/project/:projectID/teacher/info/:teacherID",
         name: "教授資訊",
         component: () => import("@/components/Teacher/InfoView.vue"),
     },
@@ -171,10 +172,7 @@ const routes = [
         path: "/:pathMatch(.*)*",
         redirect: "/404",
         name: "Error",
-        component: Not_found,
-        prompt: {
-
-        }
+        component: () => import("@/components/404.vue"),
     },
 ]
 

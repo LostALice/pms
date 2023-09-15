@@ -14,53 +14,105 @@
                     </div>
                 </div>
                 <div class="row pb-2">
-                    <div class="col text-center align-middle"><input type="text" class="form-control shadow-none"></div>
+                    <div class="col text-center align-middle">
+                        <input type="text" class="form-control shadow-none" v-model="studentSearchValue">
+                    </div>
                     <div class="col-xxl-2 text-center pt-2">
                         <p class="lead" style="font-size: 18px;">搜尋</p>
                     </div>
-                    <div class="col text-center align-middle"><input type="text" class="form-control shadow-none"></div>
+                    <div class="col text-center align-middle">
+                        <input type="text" class="form-control shadow-none" v-model="selectSearchValue">
+                    </div>
                 </div>
                 <div class="row">
-                    <div class="col"><select class="form-select-lg mx-0" size="20" multiple="" style="width: 100%;height: 100%;">
-                            <optgroup>
-                                <option value="1" selected="">D1234564 TyrantRey</option>
-                                <option value="2" selected="">D1234565 Flandre</option>
-                                <option value="3" selected="">D1234566 Elaina</option>
-                            </optgroup>
-                        </select></div>
+                    <div class="col">
+                        <EasyDataTable
+                            :headers="studentHeaders"
+                            :items="studentItems"
+                            v-model:items-selected="studentSelected"
+                            show-index
+                            :search-value="studentSearchValue"
+                        >
+                        </EasyDataTable>
+                    </div>
                     <div class="col-xxl-2 text-center border-start-warning">
-                        <p class="lead mt-3" style="font-size: 18px;">選擇全部</p>
-                        <div class="btn-group w-100" role="group"><button class="btn btn-primary shadow-none" type="button"><i class="fa fa-angle-double-left"></i></button><button class="btn btn-primary shadow-none" type="button"><i class="fa fa-angle-double-right"></i></button></div>
-                        <p class="lead mt-3" style="font-size: 18px;">選擇已選</p>
-                        <div class="btn-group w-100" role="group"><button class="btn btn-primary shadow-none" type="button"><i class="fa fa-angle-left"></i></button><button class="btn btn-primary shadow-none" type="button"><i class="fa fa-angle-right"></i></button></div>
-                        <div class="btn-group w-100" role="group">
-                            <button class="btn btn-primary shadow-none my-3" type="button">
-                                <i class="fa fa-minus-square-o"></i>
-                                &nbsp;Clear
-                            </button>
-                            <button class="btn btn-primary shadow-none my-3" type="button">
-                                <i class="fa fa-save"></i>
-                                &nbsp;Save
-                            </button>
-                        </div>
+                        <button class="btn btn-primary shadow-none w-100 my-3" type="button" @click="saveStudentList">
+                            <i class="fa fa-save"></i>
+                            &nbsp;Save
+                        </button>
                         <router-link class="btn btn-primary shadow-none w-100" role="button" to="import">
                             <i class="fa fa-download"></i>
                             &nbsp;Import from excel
                         </router-link>
                     </div>
-                    <div class="col"><select class="form-select-lg" size="20" multiple="" style="width: 100%;height: 100%;">
-                            <optgroup>
-                                <option value="1" selected="">D1234567 Alice</option>
-                                <option value="2" selected="">D1234568 Aki</option>
-                                <option value="3" selected="">D1234569 Iris</option>
-                            </optgroup>
-                        </select></div>
+                    <div class="col">
+                        <EasyDataTable
+                            :headers="SelectHeaders"
+                            :items="studentSelected"
+                            show-index
+                            :search-value="selectSearchValue">
+                        </EasyDataTable>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
 
-<script>
+<script setup>
+    import { getStudentList, newStudent } from "@/assets/js/helper.js"
+    import { useRouter } from "vue-router"
+    import { ref, onMounted } from "vue"
+    import "vue3-easy-data-table"
 
+    const router = useRouter()
+    const projectUUID = useRouter().currentRoute.value.params.projectID
+
+    const studentSearchValue = ref("")
+    const studentSelected = ref([]);
+    const studentItems = ref([])
+    const studentHeaders = [
+        {
+            text: "NID",
+            value: "nid",
+            sortable: true,
+        },
+        {
+            text: "姓名",
+            value: "name",
+            sortable: true,
+        },
+    ];
+
+    const selectSearchValue = ref("")
+    const SelectHeaders = [
+        {
+            text: "NID",
+            value: "nid",
+            sortable: true,
+        },
+        {
+            text: "姓名",
+            value: "name",
+            sortable: true,
+        },
+    ];
+
+    onMounted(async () => {
+        const studentList = await getStudentList(projectUUID);
+
+        for (const student of studentList) {
+            studentItems.value.push(student)
+        }
+
+    })
+
+    function saveStudentList(){
+        console.log(studentSelected.value)
+        for (const i of studentSelected.value) {
+            newStudent(i.nid, projectUUID)
+        }
+        router.push(`/project/${projectUUID}/student`)
+    }
 </script>

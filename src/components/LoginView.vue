@@ -42,7 +42,7 @@
                 axios.post("/JWTValidation", null, {params: {"nid": localStorage["nid"], token: localStorage["token"]}}).then(
                     function(response){
                         if (response.data.access){
-                            self.$router.go(-1)
+                            self.$router.push("/dashboard")
                         }
                         else {
                             localStorage["nid"] = null
@@ -73,7 +73,6 @@
                 const hash_hex = hash_array.map((b) => b.toString(16).padStart(2, "0")).join("");
                 this.hash_password = hash_hex;
 
-                // post method
                 axios.post("/login", null, {params: {"nid": this.nid.toUpperCase(),"password": this.hash_password}}).then(
                     function(response){
                         if (response.status != 200){
@@ -85,7 +84,7 @@
                         if (response.data.access){
                             localStorage["nid"] = nid.toLocaleUpperCase()
                             localStorage["token"] = response.data.token["x-access-token"]
-                            self.$router.push("/dashboard")
+                            self.$router.go(-1)
                         }
                         else {
                             // chinese

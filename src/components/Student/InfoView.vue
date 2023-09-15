@@ -22,12 +22,33 @@
                             <p style="font-size: 24px;color: rgb(38,38,38);">{{ name }}</p>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col col-4 justify-content-center">
+                            <p style="font-size: 24px;padding-left: 10px;">Permission</p>
+                        </div>
+                        <div class="col">
+                            <p style="font-size: 24px;color: rgb(38,38,38);">Lv.{{ permission }}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
 
-<script>
+<script setup>
+    import { useRouter } from "vue-router";
+    import { ref, onMounted } from "vue"
+    import { getStudentInfo } from "@/assets/js/helper.js"
 
+    const router = useRouter()
+    const nid = router.currentRoute.value.params.studentID
+    const name = ref("")
+    const permission = ref("")
+
+    onMounted(async () => {
+        const info = await getStudentInfo(nid)
+        name.value = info.name
+        permission.value = info.permission
+  })
 </script>

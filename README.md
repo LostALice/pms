@@ -1,6 +1,11 @@
 # pms
 
 permission level:
+    lv.0 = no access
+    lv.1 = user
+    lv.2 = teacher user
+    lv.3 = admin
+
 1.  student
     - view
         - subject
@@ -44,3 +49,6 @@ permission level:
         - teacher.add
     - edit
         - teacher.edit
+
+todo:
+    all input warning => border-danger

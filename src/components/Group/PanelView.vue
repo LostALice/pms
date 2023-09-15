@@ -36,7 +36,7 @@
 
                     <EasyDataTable :headers="headers" :items="items" table-class-name="customize-table" show-index>
                         <template #item-name="item">
-                            <router-link :to="`${$route.path}/info/${item.groupUUID}}`">{{ item.name }} </router-link>
+                            <router-link :to="`${$route.path}/info/${item.groupUUID}`">{{ item.name }} </router-link>
                         </template>
 
                         <template #item-operation="item">
@@ -44,7 +44,7 @@
                                 <button class="btn btn-primary shadow-none" @click="editItem(item)">
                                     <i class="la la-edit"></i>
                                 </button>
-                                <button class="btn btn-primary shadow-none" style="background: #e74a3b;width: 42px;" @click="editItem(item)">
+                                <button class="btn btn-primary shadow-none" style="background: #e74a3b;width: 42px;" @click="deleteItem(item)">
                                     <i class="icon ion-android-delete"></i>
                                 </button>
                             </div>
@@ -62,28 +62,60 @@
 </script>
 
 <script setup>
+    import { getGroupData, deleteGroup } from "@/assets/js/helper.js";
+    import { ref, onMounted } from "vue"
     import "vue3-easy-data-table";
-    import { getSubjectData } from "@/assets/js/helper.js";
+    import { useRouter } from "vue-router";
 
-    getSubjectData()
+    const router = useRouter()
+    const projectUUID = router.currentRoute.value.params.projectID
+
+    const items = ref([])
 
     const headers = [
-        { text: "小組名稱", value: "name" },
-        { text: "教授", value: "teacher" },
-        { text: "學生", value: "student" },
-        { text: "選項", value: "operation" },
-    ];
-
-    const items = [
         {
-            name: "test group",
-            teacher: "TyrantRey",
-            student: "3",
-            groupUUID: "f05dba41-a33f-4dc0-ad0f-c38ff58f1261"
+            text: "小組名稱",
+            value: "name",
+            sortable: true
+        },
+        {
+            text: "教授",
+            value: "teacher",
+            sortable: true
+        },
+        {
+            text: "學生",
+            value: "student",
+            sortable: true
+        },
+        {
+            text: "選項",
+            value: "operation",
+            sortable: true
         },
     ];
 
+    onMounted(async () => {
+        console.log(projectUUID)
+        const groupData = await getGroupData(projectUUID)
+        if (groupData.status_code == 403) {
+            return
+        }
+        for (const i of groupData) {
+            items.value.push(i)
+        }
+        console.log(groupData);
+    })
+
     function editItem(item) {
         console.log(item);
+    }
+
+    function deleteItem(item) {
+        if (!confirm("確定刪除項目？")) {
+            return
+        }
+        items.value.splice(item.index-1, 1)
+        deleteGroup(item.groupUUID, projectUUID)
     }
 </script>

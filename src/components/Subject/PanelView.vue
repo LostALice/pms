@@ -104,7 +104,7 @@
         if (!confirm("確定刪除項目？")) {
             return
         }
-        items.value.splice(item.index-1)
+        items.value.splice(item.index-1, 1)
         deleteSubject(item.subjectUUID)
     }
 </script>

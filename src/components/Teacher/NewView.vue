@@ -1,34 +1,59 @@
 <template>
     <div>
-        <div class="card shadow">
+        <div class="card shadow my-3">
             <div class="card-header py-3">
-                <p class="text-primary m-0 fw-bold" style="font-size: 28px;">Teacher list</p>
+                <p class="text-primary m-0 fw-bold" style="font-size: 28px;">{{ $route.name }}</p>
             </div>
             <div class="card-body mh-100">
                 <div class="row">
-                    <div class="col-xxl-5">
-                        <p class="lead text-center" style="font-size: 25px;">Selectable teacher</p><input type="text" class="form-control mb-3"><select class="form-select-lg mx-0" size="20" multiple="" style="width: 100%">
-                            <optgroup label="This is a group">
-                                <option value="12" selected="">This is item 1</option>
-                                <option value="13">This is item 2</option>
-                                <option value="14">This is item 3</option>
-                            </optgroup>
-                        </select>
+                    <div class="col-xxl-5 text-center align-middle">
+                        <p class="lead" style="font-size: 24px;">可選擇教授</p>
                     </div>
-                    <div class="col text-center border-start-warning">
-                        <p class="lead mt-5">Move all</p>
-                        <div class="btn-group w-100 my-3" role="group"><button class="btn btn-primary shadow-none mb-1" type="button"><i class="fa fa-angle-double-left"></i></button><button class="btn btn-primary shadow-none mb-1" type="button"><i class="fa fa-angle-double-right"></i></button></div>
-                        <div class="btn-group w-100" role="group"><button class="btn btn-primary shadow-none mb-1" type="button"><i class="fa fa-angle-left"></i></button><button class="btn btn-primary shadow-none mb-1" type="button"><i class="fa fa-angle-right"></i></button></div>
-                        <div class="btn-group w-100" role="group"><button class="btn btn-primary shadow-none my-3" type="button"><i class="fa fa-minus-square-o"></i>&nbsp;Clear</button><button class="btn btn-primary shadow-none my-3" type="button"><i class="fa fa-save"></i>&nbsp;Save</button></div><a class="btn btn-primary shadow-none w-100" role="button" href="../../teacher/import-teacher.html"><i class="fa fa-download"></i>&nbsp;Import from excel</a>
+                    <div class="col-xxl-5 offset-xxl-2 text-center align-middle">
+                        <p class="lead" style="font-size: 24px;">已選教授</p>
                     </div>
-                    <div class="col-xxl-5">
-                        <p class="lead text-center" style="font-size: 25px;">Selected teacher<br></p><input type="text" class="form-control mb-3"><select class="form-select-lg mx-0" size="20" multiple="" style="width: 100%">
-                            <optgroup label="This is a group">
-                                <option value="12" selected="">This is item 1</option>
-                                <option value="13">This is item 2</option>
-                                <option value="14">This is item 3</option>
-                            </optgroup>
-                        </select>
+                </div>
+                <div class="row pb-2">
+                    <div class="col text-center align-middle">
+                        <input type="text" class="form-control shadow-none" v-model="studentSearchValue">
+                    </div>
+                    <div class="col-xxl-2 text-center pt-2">
+                        <p class="lead" style="font-size: 18px;">搜尋</p>
+                    </div>
+                    <div class="col text-center align-middle">
+                        <input type="text" class="form-control shadow-none" v-model="selectSearchValue">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <EasyDataTable
+                            :headers="studentHeaders"
+                            :items="studentItems"
+                            v-model:items-selected="studentSelected"
+                            show-index
+                            :search-value="studentSearchValue"
+                        >
+                        </EasyDataTable>
+                    </div>
+                    <div class="col-xxl-2 text-center border-start-warning">
+                        <p class="lead mt-3" style="font-size: 18px;">選擇已選</p>
+                        <button class="btn btn-primary shadow-none w-100 my-3" type="button" @click="saveTeacherList">
+                            <i class="fa fa-save"></i>
+                            &nbsp;Save
+                        </button>
+                        <router-link class="btn btn-primary shadow-none w-100" role="button" to="import">
+                            <i class="fa fa-download"></i>
+                            &nbsp;Import from excel
+                        </router-link>
+                    </div>
+                    <div class="col">
+                        <EasyDataTable
+                            :headers="SelectHeaders"
+                            :items="studentSelected"
+                            show-index
+                            :search-value="selectSearchValue">
+                        </EasyDataTable>
+
                     </div>
                 </div>
             </div>
@@ -36,7 +61,59 @@
     </div>
 </template>
 
-
 <script setup>
+    import { getTeacherList, newTeacher } from "@/assets/js/helper.js"
+    import { useRouter } from "vue-router";
+    import { ref, onMounted } from "vue"
+    import "vue3-easy-data-table";
 
+    const router = useRouter()
+    const projectUUID = useRouter().currentRoute.value.params.projectID
+
+    const studentSearchValue = ref("")
+    const studentSelected = ref([]);
+    const studentItems = ref([])
+    const studentHeaders = [
+        {
+            text: "NID",
+            value: "nid",
+            sortable: true,
+        },
+        {
+            text: "姓名",
+            value: "name",
+            sortable: true,
+        },
+    ];
+
+    const selectSearchValue = ref("")
+    const SelectHeaders = [
+        {
+            text: "NID",
+            value: "nid",
+            sortable: true,
+        },
+        {
+            text: "姓名",
+            value: "name",
+            sortable: true,
+        },
+    ];
+
+    onMounted(async () => {
+        const studentList = await getTeacherList(projectUUID);
+
+        for (const teacher of studentList) {
+            studentItems.value.push(teacher)
+        }
+
+    })
+
+    function saveTeacherList(){
+        console.log(studentSelected.value)
+        for (const i of studentSelected.value) {
+            newTeacher(i.nid, projectUUID)
+        }
+        router.push(`/project/${projectUUID}/teacher`)
+    }
 </script>

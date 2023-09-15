@@ -34,7 +34,7 @@
                 </div>
                 <div class="table-responsive table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
 
-                    <EasyDataTable :headers="headers" :items="items" table-class-name="customize-table" show-index>
+                    <EasyDataTable :headers="headers" :items="items" table-class-name="customize-table" :search-value="searchValue" show-index>
                         <template #item-nid="item">
                             <router-link :to="`${$route.path}/info/${item.nid}`">{{ item.nid }}</router-link>
                         </template>
@@ -44,7 +44,7 @@
                                 <button class="btn btn-primary shadow-none" @click="editItem(item)">
                                     <i class="la la-edit"></i>
                                 </button>
-                                <button class="btn btn-primary shadow-none" style="background: #e74a3b;width: 42px;" @click="editItem(item)">
+                                <button class="btn btn-primary shadow-none" style="background: #e74a3b;width: 42px;" @click="deleteItem(item)">
                                     <i class="icon ion-android-delete"></i>
                                 </button>
                             </div>
@@ -57,22 +57,13 @@
     </div>
 </template>
 
-<script>
-    export default {
-        methods: {
-            exportPage() {
-                console.log("exported")
-            }
-        }
-    }
-</script>
-
 <script setup>
-    import { getStudentData } from "@/assets/js/helper.js";
+    import { getStudentData, deleteStudent } from "@/assets/js/helper.js";
     import { useRouter } from "vue-router"
     import { ref, onMounted } from "vue";
     import "vue3-easy-data-table";
 
+    const searchValue = ref("")
     const items = ref([])
     const projectUUID = useRouter().currentRoute.value.params.projectID
 
@@ -93,10 +84,24 @@
 
     onMounted(async () => {
         const studentData = await getStudentData(projectUUID)
-        console.log(studentData);
+        if (!Array.isArray(studentData)) {
+                return
+            }
+        for (const i of studentData) {
+            items.value.push(i)
+        }
     })
 
     function editItem(item) {
         console.log(item);
+    }
+
+    function deleteItem(item) {
+        if (!confirm("確定刪除項目？")) {
+            return
+        }
+        items.value.splice(item.index-1, 1)
+
+        deleteStudent(item.nid, projectUUID)
     }
 </script>

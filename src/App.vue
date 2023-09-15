@@ -71,18 +71,6 @@
                         <div class="d-sm-flex justify-content-between align-items-center mb-4">
                             <h3 class="text-dark mb-0" style="font-size: 36px;">{{ $route.name }}<br></h3>
                         </div>
-                        <div class="col" v-if="navBTN">
-                            <div class="row">
-                                <div class="col">
-                                    <a class="btn btn-primary shadow-none btn-link text-decoration-none" role="button" style="margin-right: 5px;background: #36b9cc;" href="../../announcements/announcements-panel.html">Announcements&nbsp;
-                                        <span class="badge bg-primary badge-counter">12</span><br></a>
-                                        <a class="btn btn-primary shadow-none btn-link text-decoration-none" role="button" style="margin-right: 5px;background: #36b9cc;" href="../../student/student-panel.html">Student&nbsp;<br></a>
-                                        <a class="btn btn-primary shadow-none btn-link text-decoration-none" role="button" style="margin-right: 5px;background: #36b9cc;" href="../../teacher/teacher-panel.html">Teacher&nbsp;<br></a>
-                                        <a class="btn btn-primary shadow-none btn-link text-decoration-none" role="button" style="margin-right: 5px;background: #36b9cc;" href="../../group/group-panel.html">Group&nbsp;<br></a>
-                                        <a class="btn btn-primary shadow-none btn-link text-decoration-none" role="button" style="margin-right: 5px;background: #36b9cc;" href="../../assignment/assignment-panel.html">Assignments&nbsp;<br></a>
-                                        <a class="btn btn-primary shadow-none btn-link text-decoration-none" role="button" style="margin-right: 5px;background: #36b9cc;" href="../../assignment/submitted/submitted-panel.html">Submitted Assignments&nbsp;<br></a></div>
-                            </div>
-                        </div>
                         <hr>
                     </div>
                     <div v-if="!FixedTop">
@@ -105,58 +93,40 @@
     </div>
 </template>
 
-<script>
-    export default {
-        name: "blank_page",
-        data() {
-            return {
-                navBTN: false,
-                FixedTop: false,
-                nid: localStorage["nid"],
-            }
-        },
-        methods: {
-            async logout() {
-                let self = this;
-                localStorage.clear()
-                self.$router.replace("/login")
-            }
-        },
-    }
-</script>
-
 <script setup>
     import { verifyLoginTimeout } from "@/assets/js/helper.js"
     import { useRouter } from "vue-router"
     import { watch, ref } from "vue"
 
-    // let newButton = ref(true)
-    // let exportButton = ref(true)
+    const FixedTop =  ref(false)
+    const nid =  localStorage["nid"]
 
     const router = useRouter()
     watch(() => router.currentRoute.value.path, async (path) => {
         if (path == "/" || path == "/login"){
             return
         }
-        let timeout = verifyLoginTimeout().then(function (value) {
-            return value
-        })
-        timeout = await timeout
+        let timeout = await verifyLoginTimeout()
 
         if (timeout == false) {
-            router.replace("/")
+            router.replace("/login")
             alert("Timeout: Token Expired")
         }
 
         const sp_page = ["/", "/login", "/404", "/403"]
 
         if (sp_page.includes(path)) {
-            let FixedTop = ref(false)
+            FixedTop.value = false
         }
 
     },{
         immediate: true, deep: true
     },)
+
+    function logout() {
+        localStorage.clear()
+        router.replace("/login")
+    }
 </script>
 
 <style>

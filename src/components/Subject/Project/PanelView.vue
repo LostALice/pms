@@ -157,7 +157,7 @@
         if (!confirm("確定刪除項目？")) {
             return
         }
-        items.value.splice(item.index-1)
-        await deleteProject(item.projectUUID)
+        items.value.splice(item.index-1, 1)
+        await deleteProject(item.projectID)
     }
 </script>

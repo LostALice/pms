@@ -2,7 +2,23 @@
     <div>
         <div class="card shadow my-3">
             <div class="card-header py-3">
-                <p class="text-primary m-0 fw-bold" style="font-size: 28px;">{{ $route.name }}</p>
+                <div class="row">
+                    <div class="col-md-6 text-nowrap">
+                        <p class="text-primary m-0 fw-bold" style="font-size: 28px;">{{ $route.name }}</p>
+                    </div>
+                    <div class="col-md-6 text-md-end dataTables_filter mt-1">
+                        <div class="btn-group" role="group">
+                            <router-link :to="`${$route.path}/new`" class="btn btn-primary btn-sm d-none d-sm-inline-block shadow-none" role="button">
+                                <i class="fas fa-plus-circle fa-sm text-white-50"></i>
+                                新增
+                            </router-link>
+                            <button @click="exportPage" class="btn btn-primary btn-sm d-none d-sm-inline-block shadow-none" role="button">
+                                <i class="fas fa-download fa-sm text-white-50"></i>
+                                匯出
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -17,9 +33,9 @@
                     </div>
                 </div>
 
-                <EasyDataTable :headers="headers" :items="items" :search-value="searchValue" show-index>
+                <EasyDataTable :headers="headers" :items="items" :search-value="searchValue" table-class-name="customize-table" show-index>
                     <template #item-nid="item">
-                        <router-link :to="`/teacher/${item.nid}`">{{ item.nid }}</router-link>
+                        <router-link :to="`${$route.path}/info/${item.nid}`">{{ item.nid }}</router-link>
                         <a href="/"></a>
                     </template>
 
@@ -28,7 +44,7 @@
                             <button class="btn btn-primary shadow-none" @click="editItem(item)">
                                 <i class="la la-edit"></i>
                             </button>
-                            <button class="btn btn-primary shadow-none" style="background: #e74a3b;width: 42px;" @click="editItem(item)">
+                            <button class="btn btn-primary shadow-none" style="background: #e74a3b;width: 42px;" @click="deleteItem(item)">
                                 <i class="icon ion-android-delete"></i>
                             </button>
                         </div>
@@ -41,28 +57,50 @@
 </template>
 
 <script setup>
-    import { getSubjectData } from "@/assets/js/helper.js";
+    import { getTeacherData, deleteTeacher } from "@/assets/js/helper.js";
+    import { useRouter } from "vue-router"
+    import { ref, onMounted } from "vue";
     import "vue3-easy-data-table";
-    import { ref } from "vue";
 
-    getSubjectData()
-
-    const searchValue = ref("");
+    const searchValue = ref("")
+    const items = ref([])
+    const projectUUID = useRouter().currentRoute.value.params.projectID
 
     const headers = [
-        { text: "NID", value: "nid",sortable: true},
-        { text: "姓名", value: "Name" },
-        { text: "選項", value: "operation" },
-    ];
-
-    const items = [
         {
-            nid: "D1111111",
-            Name: "TyrantRex",
+            text: "NID",
+            value: "nid"
+        },
+        {
+            text: "姓名",
+            value: "name"
+        },
+        {
+            text: "選項",
+            value: "operation"
         },
     ];
 
+    onMounted(async () => {
+        const teacherData = await getTeacherData(projectUUID)
+        if (!Array.isArray(teacherData)) {
+                return
+            }
+        for (const i of teacherData) {
+            items.value.push(i)
+        }
+    })
+
     function editItem(item) {
         console.log(item);
+    }
+
+    function deleteItem(item) {
+        if (!confirm("確定刪除項目？")) {
+            return
+        }
+        items.value.splice(item.index-1, 1)
+
+        deleteTeacher(item.nid, projectUUID)
     }
 </script>

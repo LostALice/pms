@@ -36,11 +36,14 @@
 
                     <EasyDataTable :headers="headers" :items="items" table-class-name="customize-table" show-index>
                         <template #item-title="item">
-                            <router-link :to="`/assignment/info/${item.assignmentUUID}}`">{{ item.title }} </router-link>
+                            <router-link :to="`${$route.path}/info/${item.assignmentUUID}`">{{ item.title }} </router-link>
                         </template>
 
                         <template #item-operation="item">
                             <div class="btn-group" role="group">
+                                <button class="btn btn-primary shadow-none" style="background: #23de7a;width: 42px;" @click="submitAssignment(item)">
+                                    <i class="icon ion-android-upload"></i>
+                                </button>
                                 <button class="btn btn-primary shadow-none" @click="editItem(item)">
                                     <i class="la la-edit"></i>
                                 </button>
@@ -68,40 +71,69 @@
 </script>
 
 <script setup>
+    import { getAssignment, deleteAssignment } from "@/assets/js/helper.js"
+    import { useRouter } from "vue-router"
+    import { ref, onMounted } from "vue"
     import "vue3-easy-data-table";
-    import { getSubjectData } from "@/assets/js/helper.js";
 
-    getSubjectData()
+    const router = useRouter()
+    const projectUUID = router.currentRoute.value.params.projectID
 
     const headers = [
-        { text: "標題", value: "title", sortable: true},
-        { text: "小組", value: "group", sortable: true},
-        { text: "上傳者", value: "uploader", sortable: true},
-        { text: "日期", value: "date", sortable: true},
-        { text: "狀態", value: "status", sortable: true},
-        { text: "選項", value: "operation", sortable: true},
+        {
+            text: "標題",
+            value: "title",
+            sortable: true
+        },
+        {
+            text: "小組",
+            value: "group",
+            sortable: true
+        },
+        {
+            text: "上傳者",
+            value: "uploader",
+            sortable: true
+        },
+        {
+            text: "日期",
+            value: "date",
+            sortable: true
+        },
+        {
+            text: "狀態",
+            value: "status",
+            sortable: true
+        },
+        {
+            text: "選項",
+            value: "operation",
+            sortable: true
+        },
     ];
 
-    const items = [
-        {
-            title: "test",
-            group: "Alice",
-            uploader: "TyrantRey",
-            date: "22-8-2023",
-            status: "Submitted",
-            assignmentUUID: "f05dba41-a33f-4dc0-ad0f-c38ff58f1261"
-        },
-        {
-            title: "test2",
-            group: "Alice",
-            uploader: "TyrantRey",
-            date: "22-8-2023",
-            status: "Not Submitted",
-            assignmentUUID: "f05dba41-a33f-4dc0-ad0f-c38ff58f1262"
-        },
-    ];
+    const items = ref([])
+
+    onMounted(async () => {
+        const assignment = await getAssignment(projectUUID)
+        if (assignment.status_code == 403) {
+            return
+        }
+        for (const i of assignment) {
+            items.value.push(i)
+        }
+    });
 
     function editItem(item) {
+        if (!confirm("確定刪除項目？")) {
+            return
+        }
+        items.value.splice(item.index-1, 1)
+        console.log(item);
+        deleteAssignment(item.assignmentUUID, projectUUID)
+    }
+
+    function submitAssignment(item) {
         console.log(item);
     }
 </script>
