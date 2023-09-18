@@ -46,12 +46,12 @@
     async function submitForm() {
         if (!projectName.value) return
         console.log(projectName.value)
-        const submit = await createProject(
+        await createProject(
             subjectUUID,
             projectName.value,
-        ).then((res) => (res))
+        )
 
-        console.log(submit);
+        router.go(-1)
     }
 </script>
 

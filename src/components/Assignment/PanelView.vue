@@ -41,9 +41,9 @@
 
                         <template #item-operation="item">
                             <div class="btn-group" role="group">
-                                <button class="btn btn-primary shadow-none" style="background: #23de7a;width: 42px;" @click="submitAssignment(item)">
+                                <router-link class="btn btn-primary shadow-none" style="background: #23de7a;width: 42px;" :to="`${$route.path}/${item.assignmentUUID}/submit`">
                                     <i class="icon ion-android-upload"></i>
-                                </button>
+                                </router-link>
                                 <button class="btn btn-primary shadow-none" @click="editItem(item)">
                                     <i class="la la-edit"></i>
                                 </button>
@@ -130,9 +130,5 @@
         }
         items.value.splice(item.index-1, 1)
         deleteAssignment(item.assignmentUUID, projectUUID)
-    }
-
-    function submitAssignment(item) {
-        console.log(item);
     }
 </script>

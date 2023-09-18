@@ -100,5 +100,6 @@
         for (const i of groupSelected.value) {
             newAssignment(projectUUID, i.groupUUID, name.value, weight.value, date.value)
         }
+        router.go(-1)
     }
 </script>

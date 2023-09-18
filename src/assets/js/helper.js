@@ -556,7 +556,7 @@ export async function getAssignmentInfo(projectUUID, assignmentUUID) {
     return resp.data
 }
 
-export async function downloadAssignment(taskUUID, fileID) {
+export async function downloadAssignment(projectUUID ,taskUUID, fileID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
@@ -601,6 +601,41 @@ export async function newAssignment(projectUUID, gid, name, weight, date) {
             "name": name,
             "weight": weight,
             "date": date,
+        }
+    })
+    return resp.data
+}
+
+export async function uploadAssignment(projectUUID, taskUUID, filename, file_) {
+    const nid = localStorage["nid"]
+    const token = localStorage["token"]
+
+    let formData = new FormData();
+    formData.append("file_", file_);
+
+    let resp = await axios.post("/uploadAssignment", formData, {
+        params: {
+            "nid": nid,
+            "token": token,
+            "projectUUID": projectUUID,
+            "taskUUID": taskUUID,
+            "filename": filename,
+        }
+    })
+    return resp.data
+}
+
+export async function deleteAssignmentItem(taskUUID, fileUUID, author) {
+    const nid = localStorage["nid"]
+    const token = localStorage["token"]
+
+    let resp = await axios.post("/deleteAssignmentItem", null, {
+        params: {
+            "nid": nid,
+            "token": token,
+            "taskID": taskUUID,
+            "fileID": fileUUID,
+            "author": author
         }
     })
     return resp.data

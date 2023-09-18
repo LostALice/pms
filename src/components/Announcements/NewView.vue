@@ -153,6 +153,7 @@
     const title = ref("")
     const router = useRouter()
     const projectUUID = router.currentRoute.value.params.projectID
+
     async function submitEvent() {
         if (title.value == "") {
             alert("標題不能為空")
@@ -163,5 +164,6 @@
         if (resp.status_code == 200) {
             router.push(`/project/${projectUUID}/announcement`)
         }
+        router.go(-1)
     }
 </script>

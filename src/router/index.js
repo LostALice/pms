@@ -109,14 +109,9 @@ const routes = [
         component: () => import("@/components/Assignment/InfoView.vue"),
     },
     {
-        path: "/project/:projectID/assignment/submitted",
-        name: "己提交作業",
-        component: () => import("@/components/Assignment/Submitted/PanelView.vue"),
-    },
-    {
-        path: "/project/:projectID/assignment/submitted/:assignmentID",
-        name: "己提交作業內容",
-        component: () => import("@/components/Assignment/Submitted/InfoView.vue"),
+        path: "/project/:projectID/assignment/:assignmentID/submit",
+        name: "繳交作業",
+        component: () => import("@/components/Assignment/SubmitView.vue"),
     },
     // project page
     {

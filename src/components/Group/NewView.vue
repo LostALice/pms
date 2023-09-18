@@ -169,5 +169,6 @@
         for (const i of studentSelected.value) {
             newGroup(projectUUID, i.nid, groupName.value, GID.GID)
         }
+        router.go(-1)
     }
 </script>

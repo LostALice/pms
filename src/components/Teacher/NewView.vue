@@ -114,6 +114,6 @@
         for (const i of studentSelected.value) {
             newTeacher(i.nid, projectUUID)
         }
-        router.push(`/project/${projectUUID}/teacher`)
+        router.go(-1)
     }
 </script>

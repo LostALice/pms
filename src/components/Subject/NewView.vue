@@ -96,7 +96,7 @@
         if (!projectName.value || !year.value || !startDate.value || !endDate.value || !settlementStartDate.value || !settlementEndDate.value) {
             return
         }
-        const submit = await createSubject(
+        await createSubject(
             projectName.value,
             year.value,
             startDate.value,
@@ -105,6 +105,6 @@
             settlementEndDate.value
         )
 
-        router.push(`/project/${submit.subjectUUID}`)
+        router.go(-1)
     }
 </script>

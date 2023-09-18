@@ -71,7 +71,6 @@
                 <div class="col">
                     <EasyDataTable :headers="headers" :items="items" table-class-name="customize-table" show-index>
                         <template #item-title="item">
-                            <!-- <a :href="`/download/${item.taskID}/${item.fileID}/${item.filename}`" :download="item.filename">{{ item.filename }} </a> -->
                             <a :href="`/download/${item.taskID}/${item.fileID}/${item.filename}`" @click="download(item)" @click.prevent="" :download="item.filename">{{ item.filename }} </a>
                         </template>
 
@@ -79,7 +78,6 @@
                             <div class="btn-group" role="group">
                                 <button class="btn btn-primary shadow-none" style="background: #e74a3b;width: 42px;" @click="deleteItem(item)">
                                     <i class="icon ion-android-delete"></i>
-
                                 </button>
                             </div>
                         </template>
@@ -91,7 +89,7 @@
 </template>
 
 <script setup>
-    import { getAssignmentInfo, markAssignmentScore } from "@/assets/js/helper.js";
+    import { getAssignmentInfo, markAssignmentScore, deleteAssignmentItem } from "@/assets/js/helper.js";
     import { downloadAssignment } from "@/assets/js/helper.js";
     import { useRouter } from "vue-router"
     import { ref, onMounted } from "vue"
@@ -132,14 +130,17 @@
 
     onMounted(async () => {
         const info = await getAssignmentInfo(projectUUID, assignmentUUID)
-        if (info.status_code == 403) {
+        if (info.status_code) {
             return
         }
         name.value = info.assignment_name
         group.value = info.group_name
         mark.value = info.mark
         weight.value = info.weight
-        date.value = info.date
+        date.value = info.date.replace("T", " ")
+        if (!info.assignment_file){
+            info.assignment_file = []
+        }
         items.value = info.assignment_file
     })
 
@@ -163,7 +164,7 @@
     async function download(item) {
         const fileExtension = item.filename.split(".").pop();
 
-        let fileData = await downloadAssignment(item.taskID, item.fileID, item.filename)
+        let fileData = await downloadAssignment(projectUUID, item.taskID, item.fileID, item.filename)
         const resultUrl = URL.createObjectURL(new Blob([fileData], {type: `application/${fileExtension}`}));
 
         const a = document.createElement("a");
@@ -177,6 +178,11 @@
     }
 
     function deleteItem(item) {
-        console.log(item);
+        if (!confirm("確定刪除項目？")) {
+            return
+        }
+        items.value.splice(item.index-1, 1)
+
+        deleteAssignmentItem(item.taskID, item.fileID, item.author)
     }
 </script>
