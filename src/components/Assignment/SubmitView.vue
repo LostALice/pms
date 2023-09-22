@@ -69,8 +69,6 @@
     const projectUUID = router.currentRoute.value.params.projectID
     const assignmentUUID = router.currentRoute.value.params.assignmentID
 
-    console.log(projectUUID);
-
     function onFileSelected(event) {
         const files = event.target.files
         for (const i of files) {

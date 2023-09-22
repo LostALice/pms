@@ -92,8 +92,6 @@
             return
         }
         groupList.value = data
-        console.log(groupSelected.value);
-        console.log(groupList.value);
     })
 
     function saveAssignment() {

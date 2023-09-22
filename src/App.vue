@@ -46,7 +46,7 @@
                                 <div class="nav-item dropdown no-arrow">
                                     <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">
                                         {{ nid }}&nbsp;&nbsp;
-                                    <img class="border rounded-circle img-profile" src="assets/img/avatars/avatar1.jpeg"></a>
+                                    <img class="border rounded-circle img-profile" :src="imageURL"></a>
                                     <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
                                         <router-link class="dropdown-item" to="/profile">
                                             <i class="fas fa-user fa-sm fa-fw me-2 text-gray-400">
@@ -94,12 +94,13 @@
 </template>
 
 <script setup>
-    import { verifyLoginTimeout } from "@/assets/js/helper.js"
+    import { verifyLoginTimeout, getProfileIconImage } from "@/assets/js/helper.js"
     import { useRouter } from "vue-router"
-    import { watch, ref } from "vue"
+    import { watch, ref, onMounted } from "vue"
 
     const FixedTop =  ref(false)
     const nid =  localStorage["nid"]
+    const imageURL = ref("")
 
     const router = useRouter()
     watch(() => router.currentRoute.value.path, async (path) => {
@@ -122,6 +123,10 @@
     },{
         immediate: true, deep: true
     },)
+
+    onMounted(async () => {
+        imageURL.value = await getProfileIconImage()
+    })
 
     function logout() {
         localStorage.clear()

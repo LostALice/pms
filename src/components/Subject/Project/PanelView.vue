@@ -12,10 +12,6 @@
                                 <i class="fas fa-plus-circle fa-sm text-white-50"></i>
                                 新增
                             </router-link>
-                            <button @click="exportPage" class="btn btn-primary btn-sm d-none d-sm-inline-block shadow-none" role="button">
-                                <i class="fas fa-download fa-sm text-white-50"></i>
-                                匯出
-                            </button>
                         </div>
                     </div>
                 </div>

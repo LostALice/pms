@@ -72,7 +72,6 @@
                 const hash_array = Array.from(new Uint8Array(hash));
                 const hash_hex = hash_array.map((b) => b.toString(16).padStart(2, "0")).join("");
                 this.hash_password = hash_hex;
-
                 axios.post("/login", null, {params: {"nid": this.nid.toUpperCase(),"password": this.hash_password}}).then(
                     function(response){
                         if (response.status != 200){
@@ -88,7 +87,7 @@
                         }
                         else {
                             // chinese
-                            alert("Username or password incorrect")
+                            alert("用戶名或密碼不正確")
                         }
 
                     }

@@ -1,51 +1,84 @@
 <template>
-    <div class="row mb-3">
-        <div class="col-lg-4">
-            <div class="card mb-3">
-                <div class="card-body text-center shadow"><img class="rounded-circle mb-3 mt-4" src="assets/img/dogs/image2.jpeg" width="160" height="160">
-                    <div class="mb-3"><button class="btn btn-primary btn-sm shadow-none" type="button">Change Photo</button></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-8">
+    <div class="col mb-3">
+        <div class="col-lg">
             <div class="row">
                 <div class="col">
                     <div class="card shadow my-3">
                         <div class="card-header py-3">
-                            <p class="text-primary m-0 fw-bold" style="font-size: 28px;">User Settings</p>
+                            <p class="text-primary m-0 fw-bold" style="font-size: 28px;">個人檔案</p>
                         </div>
-                        <div class="card-body">
-                            <form>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="mb-3"><label class="form-label" for="username"><strong>Username</strong></label><input class="form-control shadow-none" type="text" id="username" placeholder="name" name="username"></div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="mb-3"><label class="form-label" for="email"><strong>Email Address</strong></label><input class="form-control shadow-none" type="email" id="email" placeholder="user@example.com" name="email"></div>
+                        <div class="card-body text-center">
+                            <div class="row">
+                                <div class="col">
+                                    <img id="main_image" class="rounded-circle mb-3 mt-4" width="160" height="160" :src="imageURL">
+                                </div>
+                                <div class="col d-flex align-items-center justify-content-center">
+                                    <div class="w-100">
+                                        <strong>更改圖片</strong>
+                                        <input @change="changeImage" class="form-control shadow-none" type="file" accept="image/*">
                                     </div>
                                 </div>
-                                <div class="text-end mb-3"><button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-save"></i>&nbsp;Save</button></div>
-                            </form>
+                                <div class="text-end">
+                                    <button @click="uploadImage" class="btn btn-primary btn-sm shadow-none">
+                                        <i class="fa fa-save"></i>
+                                        &nbsp;儲存
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg">
+            <div class="row">
+                <div class="col">
                     <div class="card shadow my-3">
                         <div class="card-header py-3">
-                            <p class="text-primary m-0 fw-bold" style="font-size: 28px;">Change password</p>
+                            <p class="text-primary m-0 fw-bold" style="font-size: 28px;">更改密碼</p>
                         </div>
-                        <div class="card-body">
                             <form>
-                                <div class="mb-3"><label class="form-label" for="address"><strong>Old password</strong></label><input class="form-control shadow-none" type="password" id="address" name="address" show="*" minlength="8" maxlength="50" required=""></div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="mb-3"><label class="form-label" for="city"><strong>New password</strong></label><input class="form-control shadow-none" type="password" id="city" name="city" minlength="8" maxlength="50" required=""></div>
+                                <input
+                                    type="text"
+                                    name="email"
+                                    value="..."
+                                    autocomplete="username email"
+                                    style="display: none;"
+                                    >
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            <strong>舊密碼</strong>
+                                        </label>
+                                        <input v-model="oldPassword" class="form-control shadow-none" type="password" autocomplete="current-password" show="*" minlength="8" maxlength="50" required="">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label class="form-label">
+                                                    <strong>新密碼</strong>
+                                                </label>
+                                            <input v-model="newPassword" class="form-control shadow-none" autocomplete="new-password" show="*" type="password" minlength="8" maxlength="50" required="">
+                                        </div>
                                     </div>
                                     <div class="col">
-                                        <div class="mb-3"><label class="form-label" for="country"><strong>Confirm</strong></label><input class="form-control shadow-none" type="password" id="country" name="country" minlength="8" maxlength="50" required=""></div>
+                                        <div class="mb-3">
+                                            <label class="form-label">
+                                                <strong>確認密碼</strong>
+                                            </label>
+                                            <input v-model="confirmPassword" autocomplete="confirm-password" class="form-control shadow-none" show="*" type="password" minlength="8" maxlength="50" required="">
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="text-end mb-3"><button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-save"></i>&nbsp;Save</button></div>
-                            </form>
-                        </div>
+                                <div class="text-end mb-3">
+                                    <button @click="changePassword" class="btn btn-primary btn-sm shadow-none" type="submit">
+                                        <i class="fa fa-save"></i>
+                                        &nbsp;儲存
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -53,14 +86,102 @@
     </div>
 </template>
 
-<script>
-    export default{
-        data() {
-            return{
-                nid: "",
-                password: "",
-            }
-        },
-        name: "ProfileView",
+<script setup>
+    import { changePassword_, getProfileIconImage, changeIcon } from "@/assets/js/helper.js"
+    import { useRouter } from "vue-router"
+    import { ref, onMounted } from "vue"
+
+    const router = useRouter()
+
+    const newPassword = ref("")
+    const oldPassword = ref("")
+    const confirmPassword = ref("")
+    const imageURL = ref("")
+
+    let file = ref()
+
+    onMounted(async () => {
+        imageURL.value = await getProfileIconImage()
+    })
+
+    async function uploadImage() {
+        changeIcon(file.value, file.value.name)
     }
+
+    function changeImage(event) {
+        file.value = event.target.files[0]
+
+        if (file.value) {
+            imageURL.value = URL.createObjectURL(file.value)
+        }
+    }
+
+    async function changePassword() {
+        if (newPassword.value != confirmPassword.value) {
+            alert("密碼不一致")
+            newPassword.value = ""
+            oldPassword.value = ""
+            confirmPassword.value = ""
+            return
+        }
+        if (newPassword.value == "") {
+            alert("新密碼不能為空")
+            newPassword.value = ""
+            oldPassword.value = ""
+            confirmPassword.value = ""
+            return
+        }
+        if (oldPassword.value == "") {
+            alert("舊密碼不能為空")
+            newPassword.value = ""
+            oldPassword.value = ""
+            confirmPassword.value = ""
+            return
+        }
+        if (oldPassword.value == newPassword.value) {
+            alert("密碼不能為一致")
+            newPassword.value = ""
+            oldPassword.value = ""
+            confirmPassword.value = ""
+            return
+        }
+        for (const i of [newPassword.value, newPassword.value, oldPassword.value]) {
+            if (i.length < 8) {
+                alert("密碼至少8個字元以上")
+                newPassword.value = ""
+                oldPassword.value = ""
+                confirmPassword.value = ""
+                return
+            }
+        }
+
+        let newEncoder = new TextEncoder();
+        const newData = newEncoder.encode(newPassword.value);
+        const newHash = await crypto.subtle.digest("SHA-256", newData);
+        const newHash_array = Array.from(new Uint8Array(newHash));
+        const newHash_hex = newHash_array.map((b) => b.toString(16).padStart(2, "0")).join("");
+        const newHash_password = newHash_hex;
+
+        let oldEncoder = new TextEncoder();
+        const oldData = oldEncoder.encode(oldPassword.value);
+        const oldHash = await crypto.subtle.digest("SHA-256", oldData);
+        const oldHash_array = Array.from(new Uint8Array(oldHash));
+        const oldHash_hex = oldHash_array.map((b) => b.toString(16).padStart(2, "0")).join("");
+        const oldHash_password = oldHash_hex;
+
+        const status_code = await changePassword_(oldHash_password, newHash_password)
+        if (status_code.status_code == 200) {
+            localStorage.clear()
+            router.go("/login")
+            return
+        }
+        if (status_code.status_code == 400) {
+            newPassword.value = ""
+            oldPassword.value = ""
+            confirmPassword.value = ""
+            alert("密碼不正確")
+            return
+        }
+    }
+
 </script>

@@ -12,10 +12,6 @@
                                 <i class="fas fa-plus-circle fa-sm text-white-50"></i>
                                 新增
                             </router-link>
-                            <button @click="exportPage" class="btn btn-primary btn-sm d-none d-sm-inline-block shadow-none" role="button">
-                                <i class="fas fa-download fa-sm text-white-50"></i>
-                                匯出
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -59,16 +55,6 @@
         </div>
     </div>
 </template>
-
-<script>
-    export default {
-        methods: {
-            exportPage() {
-                console.log("exported")
-            }
-        }
-    }
-</script>
 
 <script setup>
     import { getAssignment, deleteAssignment } from "@/assets/js/helper.js"
@@ -122,7 +108,7 @@
         for (const i of data) {
             items.value.push(i)
         }
-    });
+    })
 
     function editItem(item) {
         if (!confirm("確定刪除項目？")) {
