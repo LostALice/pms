@@ -327,6 +327,24 @@ export async function deleteStudent(studentNID, projectUUID) {
     return resp.data
 }
 
+export async function importStudent(projectUUID, file_) {
+    const nid = localStorage["nid"]
+    const token = localStorage["token"]
+
+    let xlsxData = new FormData();
+    xlsxData.append("file_", file_);
+
+    const resp = await axios.post("/importStudent" ,xlsxData , {
+        params: {
+            "nid": nid,
+            "token": token,
+            "projectUUID": projectUUID
+        }
+    })
+
+    return resp.data
+}
+
 // teacher
 export async function getTeacherData(projectUUID) {
     const nid = localStorage["nid"]
@@ -405,6 +423,24 @@ export async function deleteTeacher(teacherNID, projectUUID) {
         }
     })
 
+
+    return resp.data
+}
+
+export async function importTeacher(projectUUID, file_) {
+    const nid = localStorage["nid"]
+    const token = localStorage["token"]
+
+    let xlsxData = new FormData();
+    xlsxData.append("file_", file_);
+
+    const resp = await axios.post("/importTeacher" ,xlsxData , {
+        params: {
+            "nid": nid,
+            "token": token,
+            "projectUUID": projectUUID
+        }
+    })
 
     return resp.data
 }
@@ -680,3 +716,12 @@ export async function changeIcon(file_, filename) {
     return resp.data
 }
 
+// dashboard
+export async function getDeadlineProject() {
+    const nid = localStorage["nid"]
+    const token = localStorage["token"]
+
+    const resp = await axios.get(`/getDeadlineProject/${nid}/${token}`)
+
+    return resp.data
+}

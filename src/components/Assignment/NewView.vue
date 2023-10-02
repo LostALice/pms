@@ -1,5 +1,10 @@
 <template>
-    <div>
+    <div
+    @dragover.prevent
+    @dragenter.prevent
+    @dragleave.prevent
+    @drop="handleDrop"
+    >
         <div class="card shadow my-3">
             <div class="card-header py-3">
                 <p class="text-primary m-0 fw-bold" style="font-size: 28px;">{{ $route.name }}</p>

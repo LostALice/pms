@@ -1,50 +1,28 @@
 <template>
     <div>
         <div class="row">
-            <div class="col-md-4">
-                <div class="card shadow border-start-primary py-2">
-                    <div class="card-body">
-                        <div class="row align-items-center no-gutters">
-                            <div class="col me-2">
-                                <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>deadline Project</span></div>
-                                <div class="text-dark fw-bold h5 mb-0"><a href="#"><span>#2023-12-12</span></a></div>
-                            </div>
-                            <div class="col-auto"><i class="fas fa-calendar fa-2x text-gray-300"></i></div>
-                        </div>
+            <div class="col">
+                <div class="card shadow my-3">
+                    <div class="card-header py-3">
+                        <h6 class="text-primary fw-bold m-0" style="font-size: 24px;">作業截止</h6>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card shadow border-start-warning py-2">
                     <div class="card-body">
                         <div class="row align-items-center no-gutters">
                             <div class="col me-2">
-                                <div class="text-uppercase text-warning fw-bold text-xs mb-1"><span>Unread Announcements</span></div>
-                                <div class="text-dark fw-bold h5 mb-0"><a href="#">1<span></span></a></div>
-                            </div>
-                            <div class="col-auto"><i class="fas fa-comments fa-2x text-gray-300"></i></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card shadow border-start-info py-2">
-                    <div class="card-body">
-                        <div class="row align-items-center no-gutters">
-                            <div class="col me-2">
-                                <div class="text-uppercase text-info fw-bold text-xs mb-1"><span>Tasks</span></div>
-                                <div class="row g-0 align-items-center">
-                                    <div class="col-auto">
-                                        <div class="text-dark fw-bold h5 mb-0 me-3"><span>50%</span></div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="progress progress-sm">
-                                            <div class="progress-bar bg-info" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"><span class="visually-hidden">50%</span></div>
-                                        </div>
-                                    </div>
+                                <div class="text-uppercase text-primary fw-bold mb-1"><span>作業名稱</span></div>
+                                <div class="text-dark fw-bold h5 mb-0">
+                                    <span>#{{ deadlineProject.NAME }}</span>
                                 </div>
                             </div>
-                            <div class="col-auto"><i class="fas fa-clipboard-list fa-2x text-gray-300"></i></div>
+                            <div class="col me-2">
+                                <div class="text-uppercase text-primary fw-bold mb-1"><span>作業截止日期</span></div>
+                                <div class="text-dark fw-bold h5 mb-0">
+                                    <router-link :to="`/project/${deadlineProject.PROJECT_ID}/assignment`">
+                                        <span class="alert-warning">#{{ deadlineProject.SUBMISSION_DATE }}</span>
+                                    </router-link>
+                                </div>
+                            </div>
+                            <div class="col-auto"><i class="fas fa-calendar fa-2x text-gray-300"></i></div>
                         </div>
                     </div>
                 </div>
@@ -52,71 +30,77 @@
         </div>
         <hr>
         <div class="row">
-            <div class="col-lg-6 mb-4">
-                <div class="card shadow my-3">
-                    <div class="card-header py-3">
-                        <h6 class="text-primary fw-bold m-0" style="font-size: 24px;">Projects&nbsp;progress rate</h6>
-                    </div>
-                    <div class="card-body">
-                        <h4 class="small fw-bold">Server migration<span class="float-end">20%</span></h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-danger" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%;"><span class="visually-hidden">20%</span></div>
-                        </div>
-                        <h4 class="small fw-bold">Sales tracking<span class="float-end">40%</span></h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-warning" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%;"><span class="visually-hidden">40%</span></div>
-                        </div>
-                        <h4 class="small fw-bold">Customer Database<span class="float-end">60%</span></h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-primary" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"><span class="visually-hidden">60%</span></div>
-                        </div>
-                        <h4 class="small fw-bold">Payout Details<span class="float-end">80%</span></h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-info" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%;"><span class="visually-hidden">80%</span></div>
-                        </div>
-                        <h4 class="small fw-bold">Account setup<span class="float-end">Complete!</span></h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-success" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"><span class="visually-hidden">100%</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="col">
                 <div class="card shadow my-3">
                     <div class="card-header py-3">
-                        <h6 class="text-primary fw-bold m-0" style="font-size: 24px;">Upcoming event</h6>
+                        <h6 class="text-primary fw-bold m-0" style="font-size: 24px;">即將繳交的作業</h6>
                     </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <div class="row align-items-center no-gutters">
-                                <div class="col me-2">
-                                    <h6 class="mb-0"><strong>Lunch meeting</strong></h6><span class="text-xs">10:30 AM</span>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 text-nowrap">
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-md-end dataTables_filter" id="dataTable_filter">
+                                    <label class="form-label">
+                                        <input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search">
+                                    </label>
                                 </div>
                             </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="row align-items-center no-gutters">
-                                <div class="col me-2">
-                                    <h6 class="mb-0"><strong>Lunch meeting</strong></h6><span class="text-xs">11:30 AM</span>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="row align-items-center no-gutters">
-                                <div class="col me-2">
-                                    <h6 class="mb-0"><strong>Lunch meeting</strong></h6><span class="text-xs">12:30 AM</span>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
+                        </div>
+                        <div class="table-responsive table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
+
+                            <EasyDataTable :headers="headers" :items="projectList" table-class-name="customize-table" show-index>
+                                <template #item-title="item">
+                                    <router-link :to="`${$route.path}/info/${item.assignmentUUID}`">{{ item.title }} </router-link>
+                                </template>
+
+                                <template #item-operation="item">
+                                    <div class="btn-group" role="group">
+                                        <router-link class="btn btn-primary shadow-none" style="background: #23de7a;width: 42px;" :to="`${$route.path}/${item.assignmentUUID}/submit`">
+                                            <i class="icon ion-android-upload"></i>
+                                        </router-link>
+                                        <button class="btn btn-primary shadow-none" style="background: #e74a3b;width: 42px;" @click="deleteItem(item)">
+                                            <i class="icon ion-android-delete"></i>
+                                        </button>
+                                    </div>
+                                </template>
+                            </EasyDataTable>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
 
-<script>
-    export default {
-        name: "DashboardView",
-    }
+<script setup>
+    import { ref, onMounted } from "vue"
+    import { getDeadlineProject } from "@/assets/js/helper.js"
+    import "vue3-easy-data-table";
+
+    const deadlineProject = ref({})
+    const projectList = ref([])
+
+    const headers = [
+        {
+            text: "作業標題",
+            value: "NAME",
+            sortable: true
+        },
+        {
+            text: "截止日期",
+            value: "SUBMISSION_DATE",
+            sortable: true
+        },
+    ]
+
+    onMounted(async () => {
+        const project = await getDeadlineProject()
+        for (const i of project.data) {
+            i.SUBMISSION_DATE = i.SUBMISSION_DATE.replace("T", " ")
+            projectList.value.push(i)
+        }
+        deadlineProject.value = projectList.value[0]
+    })
 </script>

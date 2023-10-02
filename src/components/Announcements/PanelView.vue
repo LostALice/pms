@@ -35,9 +35,6 @@
 
                     <template #item-operation="item">
                         <div class="btn-group" role="group">
-                            <button class="btn btn-primary shadow-none" @click="editItem(item)">
-                                <i class="la la-edit"></i>
-                            </button>
                             <button class="btn btn-primary shadow-none" style="background: #e74a3b;width: 42px;" @click="deleteItem(item)">
                                 <i class="icon ion-android-delete"></i>
                             </button>
@@ -95,10 +92,6 @@
             items.value.push(i)
         }
     })
-
-    function editItem(item) {
-        console.log(item);
-    }
 
     async function deleteItem(item) {
         if (!confirm("確定刪除項目？")) {

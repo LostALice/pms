@@ -1,6 +1,5 @@
 <template>
     <div
-    class="drop-zone"
     @dragover.prevent
     @dragenter.prevent
     @dragleave.prevent

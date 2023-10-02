@@ -83,10 +83,9 @@
                         if (response.data.access){
                             localStorage["nid"] = nid.toLocaleUpperCase()
                             localStorage["token"] = response.data.token["x-access-token"]
-                            self.$router.go(-1)
+                        self.$router.go("/subject")
                         }
                         else {
-                            // chinese
                             alert("用戶名或密碼不正確")
                         }
 

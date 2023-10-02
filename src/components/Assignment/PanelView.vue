@@ -40,10 +40,7 @@
                                 <router-link class="btn btn-primary shadow-none" style="background: #23de7a;width: 42px;" :to="`${$route.path}/${item.assignmentUUID}/submit`">
                                     <i class="icon ion-android-upload"></i>
                                 </router-link>
-                                <button class="btn btn-primary shadow-none" @click="editItem(item)">
-                                    <i class="la la-edit"></i>
-                                </button>
-                                <button class="btn btn-primary shadow-none" style="background: #e74a3b;width: 42px;" @click="editItem(item)">
+                                <button class="btn btn-primary shadow-none" style="background: #e74a3b;width: 42px;" @click="deleteItem(item)">
                                     <i class="icon ion-android-delete"></i>
                                 </button>
                             </div>
@@ -77,7 +74,7 @@
             sortable: true
         },
         {
-            text: "上傳者",
+            text: "公佈",
             value: "uploader",
             sortable: true
         },
@@ -106,11 +103,12 @@
             return
         }
         for (const i of data) {
+            i.date = i.date.replace("T", " ")
             items.value.push(i)
         }
     })
 
-    function editItem(item) {
+    function deleteItem(item) {
         if (!confirm("確定刪除項目？")) {
             return
         }
