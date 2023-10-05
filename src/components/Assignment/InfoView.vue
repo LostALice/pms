@@ -85,13 +85,18 @@
                 </div>
             </div>
         </div>
+
+        <SubmitView />
     </div>
 </template>
 
 <script setup>
-    import { getAssignmentInfo, markAssignmentScore, deleteAssignmentItem } from "@/assets/js/helper.js";
+    import { deleteAssignmentItem } from "@/assets/js/helper.js";
+    import { markAssignmentScore } from "@/assets/js/helper.js";
     import { downloadAssignment } from "@/assets/js/helper.js";
+    import { getAssignmentInfo } from "@/assets/js/helper.js";
     import { useRouter } from "vue-router"
+    import SubmitView from "./SubmitView"
     import { ref, onMounted } from "vue"
     import "vue3-easy-data-table";
 

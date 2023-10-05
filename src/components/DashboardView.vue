@@ -10,16 +10,25 @@
                         <div class="row align-items-center no-gutters">
                             <div class="col me-2">
                                 <div class="text-uppercase text-primary fw-bold mb-1"><span>作業名稱</span></div>
-                                <div class="text-dark fw-bold h5 mb-0">
-                                    <span>#{{ deadlineProject.NAME }}</span>
+                                <div class="text-dark fw-bold h5 mb-0" v-if="deadlineProject == []">
+                                    <router-link :to="`/project/${deadlineProject.PROJECT_ID}/assignment`">
+                                        <span class="alert-warning">{{ deadlineProject.NAME }}</span>
+                                    </router-link>
+                                </div>
+                                <div class="text-dark fw-bold h5 mb-0" v-else>
+                                    <span>沒有作業</span>
                                 </div>
                             </div>
-                            <div class="col me-2">
+                            <div class="col me-2" v-if="deadlineProject == []">
                                 <div class="text-uppercase text-primary fw-bold mb-1"><span>作業截止日期</span></div>
                                 <div class="text-dark fw-bold h5 mb-0">
-                                    <router-link :to="`/project/${deadlineProject.PROJECT_ID}/assignment`">
-                                        <span class="alert-warning">#{{ deadlineProject.SUBMISSION_DATE }}</span>
-                                    </router-link>
+                                    <span>{{ deadlineProject.SUBMISSION_DATE }}</span>
+                                </div>
+                            </div>
+                            <div class="col me-2" v-else>
+                                <div class="text-uppercase text-primary fw-bold mb-1"><span>作業截止日期</span></div>
+                                <div class="text-dark fw-bold h5 mb-0">
+                                    <span>沒有截止日期</span>
                                 </div>
                             </div>
                             <div class="col-auto"><i class="fas fa-calendar fa-2x text-gray-300"></i></div>
@@ -29,7 +38,7 @@
             </div>
         </div>
         <hr>
-        <div class="row">
+        <div class="row" v-if="deadlineProject == []">
             <div class="col">
                 <div class="card shadow my-3">
                     <div class="card-header py-3">
@@ -48,24 +57,11 @@
                             </div>
                         </div>
                         <div class="table-responsive table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
-
                             <EasyDataTable :headers="headers" :items="projectList" table-class-name="customize-table" show-index>
-                                <template #item-title="item">
-                                    <router-link :to="`${$route.path}/info/${item.assignmentUUID}`">{{ item.title }} </router-link>
-                                </template>
-
-                                <template #item-operation="item">
-                                    <div class="btn-group" role="group">
-                                        <router-link class="btn btn-primary shadow-none" style="background: #23de7a;width: 42px;" :to="`${$route.path}/${item.assignmentUUID}/submit`">
-                                            <i class="icon ion-android-upload"></i>
-                                        </router-link>
-                                        <button class="btn btn-primary shadow-none" style="background: #e74a3b;width: 42px;" @click="deleteItem(item)">
-                                            <i class="icon ion-android-delete"></i>
-                                        </button>
-                                    </div>
+                                <template #item-NAME="item">
+                                    <router-link :to="`/project/${deadlineProject.PROJECT_ID}/assignment`">{{ item.NAME }} </router-link>
                                 </template>
                             </EasyDataTable>
-
                         </div>
                     </div>
                 </div>
@@ -75,8 +71,8 @@
 </template>
 
 <script setup>
-    import { ref, onMounted } from "vue"
     import { getDeadlineProject } from "@/assets/js/helper.js"
+    import { ref, onMounted } from "vue"
     import "vue3-easy-data-table";
 
     const deadlineProject = ref({})
@@ -97,6 +93,9 @@
 
     onMounted(async () => {
         const project = await getDeadlineProject()
+        if (!Array.isArray(project.data)) {
+            return
+        }
         for (const i of project.data) {
             i.SUBMISSION_DATE = i.SUBMISSION_DATE.replace("T", " ")
             projectList.value.push(i)

@@ -3,7 +3,8 @@
     <div id="wrapper">
         <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
             <div class="container-fluid d-flex flex-column p-0">
-                <router-link class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" to="/dashboard">
+                <router-link class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0"
+                    to="/dashboard">
                     <div class="sidebar-brand-text mx-3">
                         <span style="font-size: 15px;">
                             <strong>逢甲大學專題管理系統</strong><br>
@@ -44,9 +45,10 @@
                         <ul class="navbar-nav flex-nowrap ms-auto">
                             <li class="nav-item dropdown no-arrow">
                                 <div class="nav-item dropdown no-arrow">
-                                    <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">
+                                    <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown"
+                                        href="#">
                                         {{ nid }}&nbsp;&nbsp;
-                                    <img class="border rounded-circle img-profile" :src="imageURL"></a>
+                                        <img class="border rounded-circle img-profile" :src="imageURL"></a>
                                     <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
                                         <router-link class="dropdown-item" to="/profile">
                                             <i class="fas fa-user fa-sm fa-fw me-2 text-gray-400">
@@ -95,16 +97,16 @@
 
 <script setup>
     import { verifyLoginTimeout, getProfileIconImage } from "@/assets/js/helper.js"
-    import { useRouter } from "vue-router"
     import { watch, ref, onMounted } from "vue"
+    import { useRouter } from "vue-router"
 
-    const FixedTop =  ref(false)
-    const nid =  localStorage["nid"]
+    const FixedTop = ref(false)
+    const nid = localStorage["nid"]
     const imageURL = ref("")
 
     const router = useRouter()
     watch(() => router.currentRoute.value.path, async (path) => {
-        if (path == "/" || path == "/login"){
+        if (path == "/" || path == "/login") {
             return
         }
         let timeout = await verifyLoginTimeout()
@@ -120,7 +122,7 @@
             FixedTop.value = false
         }
 
-    },{
+    }, {
         immediate: true, deep: true
     },)
 
@@ -135,18 +137,21 @@
 </script>
 
 <style>
-    .fade-enter-from, .fade-leave-to {
+    .fade-enter-from,
+    .fade-leave-to {
         opacity: 0;
     }
 
-    .fade-enter-active, .fade-leave-active {
-        transition: opacity 0.1s ease-out ;
+    .fade-enter-active,
+    .fade-leave-active {
+        transition: opacity 0.1s ease-out;
     }
 
     .customize-table {
         --easy-table-header-font-size: 24px;
         --easy-table-body-row-font-size: 18px;
     }
+
     .input_container {
         border: 1px solid #e5e5e5;
     }

@@ -3,12 +3,12 @@
     @dragover.prevent
     @dragenter.prevent
     @dragleave.prevent
-    @drop="handleDrop" >
+    @drop="handleDrop">
     <div class="card shadow my-3">
         <div class="card-header py-3">
-            <p class="text-primary m-0 fw-bold" style="font-size: 28px;">{{ $route.name }}</p>
+            <p class="text-primary m-0 fw-bold" style="font-size: 28px;">上載檔案</p>
         </div>
-        <div class="card-body mh-100">
+        <div class="card-body">
             <div class="row">
                 <div class="col">
                         <div class="row">
@@ -22,10 +22,11 @@
                     </div>
                 </div>
                 <br />
-                <div class="row">
+                <div class="col">
                     <EasyDataTable
                     :headers="headers"
                     :items="fileList"
+                    table-class-name="customize-table"
                     show-index  />
                 </div>
                 <br>
@@ -102,6 +103,6 @@
         for (const i of fileList.value) {
             uploadAssignment(projectUUID, assignmentUUID, i.name, i.file)
         }
-        router.go(-1)
+        router.push(`/project/${projectUUID}/assignment`)
     }
 </script>
