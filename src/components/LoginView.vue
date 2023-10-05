@@ -21,77 +21,74 @@
     </section>
 </template>
 
-<script>
-    import { getJWTToken } from '@/assets/js/helper.js';
-    import axios from 'axios';
+<script setup>
+    import { getJWTToken } from "@/assets/js/helper.js";
+    import { ref, onMounted } from "vue";
+    import { useRouter } from "vue-router";
+    import axios from "axios";
 
-    export default {
-        name: "LoginPage",
-        data() {
-            return{
-                nid: "",
-                password: "",
-            }
-        },
-        mounted() {
-            axios.defaults.headers = {"Content-Type":"application/json","accept":"application/json"}
-            let self = this;
 
-            const token = getJWTToken()
-            if (token) {
-                axios.post("/JWTValidation", null, {params: {"nid": localStorage["nid"], token: localStorage["token"]}}).then(
-                    function(response){
-                        if (response.data.access){
-                            self.$router.push("/dashboard")
-                        }
-                        else {
-                            localStorage["nid"] = null
-                            localStorage["token"] = null
-                            self.$router.push("/")
-                        }
-                    }
-                )
-            }
-        },
-        methods: {
-            async login_func() {
-                if (this.nid == "") {
-                    alert("Please enter NID");
-                    return
-                }
-                if (this.password == ""){
-                    alert("Please enter Password");
-                    return
-                }
-                let self = this;
+    const nid = ref("");
+    const password = ref("");
+    const hashPassword = ref("");
 
-                const password = this.password;
-                const encoder = new TextEncoder();
-                const data = encoder.encode(password);
-                const hash = await crypto.subtle.digest("SHA-256", data);
-                const hash_array = Array.from(new Uint8Array(hash));
-                const hash_hex = hash_array.map((b) => b.toString(16).padStart(2, "0")).join("");
-                this.hash_password = hash_hex;
-                axios.post("/login", null, {params: {"nid": this.nid.toUpperCase(),"password": this.hash_password}}).then(
-                    function(response){
-                        if (response.status != 200){
-                           alert("internal server error: " + response.status);
-                        }
+    const router = useRouter()
 
-                        // store jwt token to localStorage for future use
-                        let nid = self.nid.toUpperCase()
-                        if (response.data.access){
-                            localStorage["nid"] = nid.toLocaleUpperCase()
-                            localStorage["token"] = response.data.token["x-access-token"]
-                        self.$router.go("/subject")
-                        }
-                        else {
-                            alert("用戶名或密碼不正確")
-                        }
-
-                    }
-                )
-            },
+    const login_func = async () => {
+        if (nid.value === "") {
+            alert("Please enter NID");
+            return;
         }
-    }
+        if (password.value === "") {
+            alert("Please enter Password");
+            return;
+        }
+
+        nid.value = nid.value.toUpperCase()
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password.value);
+        const hash = await crypto.subtle.digest("SHA-256", data);
+        const hash_array = Array.from(new Uint8Array(hash));
+        const hash_hex = hash_array.map((b) => b.toString(16).padStart(2, "0")).join("");
+        hashPassword.value = hash_hex;
+
+        axios.post("/login", null, {
+            params: {
+                nid: nid.value.toUpperCase(),
+                password: hashPassword.value,
+            },
+        }).then((response) => {
+            if (response.status !== 200) {
+                alert("internal server error: " + response.status);
+            }
+
+            // Store jwt token to localStorage for future use
+            if (response.data.access) {
+                localStorage["nid"] = nid.value.toLocaleUpperCase();
+                localStorage["token"] = response.data.token["x-access-token"];
+                router.push("/dashboard"); // Assuming you have "router" available
+            } else {
+                alert("用戶名或密碼不正確");
+            }
+        });
+    };
+
+    onMounted(() => {
+        axios.defaults.headers = { "Content-Type": "application/json", accept: "application/json" };
+
+        const token = getJWTToken();
+        if (token) {
+            axios.post("/JWTValidation", null, {
+                    params: { nid: localStorage["nid"], token: localStorage["token"] },
+                }).then((response) => {
+                    if (response.data.access) {
+                        router.push("/dashboard"); // Assuming you have "router" available
+                    } else {
+                        localStorage["nid"] = null;
+                        localStorage["token"] = null;
+                        router.push("/");
+                    }
+                });
+        }
+    });
 </script>
