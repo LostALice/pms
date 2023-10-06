@@ -53,7 +53,6 @@
                             show-index
                             :search-value="selectSearchValue">
                         </EasyDataTable>
-
                     </div>
                 </div>
             </div>

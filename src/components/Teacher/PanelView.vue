@@ -43,7 +43,6 @@
                         </div>
                     </template>
                 </EasyDataTable>
-
             </div>
         </div>
     </div>

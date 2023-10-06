@@ -9,13 +9,5 @@
     </div>
 </template>
 
-<script>
-    export default {
-        data(){
-            return {
-                page_name: "404"
-            }
-        },
-        name: "Not_found"
-    }
+<script setup>
 </script>

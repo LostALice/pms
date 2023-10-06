@@ -29,6 +29,7 @@
                 </form>
             </div>
         </div>
+        <AlertBlock :message="message" />
     </div>
 </template>
 

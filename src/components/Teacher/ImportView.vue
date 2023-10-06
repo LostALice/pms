@@ -80,6 +80,7 @@
                 </div>
             </div>
         </div>
+        <AlertBlock :message="message" />
     </div>
 </template>
 
@@ -88,6 +89,7 @@
     import { useRouter } from "vue-router"
     import { ref } from "vue"
 
+    const message = ref("")
     const fileList = ref(null)
     const router = useRouter()
     const projectUUID = router.currentRoute.value.params.projectID
@@ -99,11 +101,11 @@
 
     function upload() {
         if (!fileList.value) {
-            alert("沒有檔案")
+            message.value = "沒有檔案"
             return
         }
         importTeacher(projectUUID, fileList.value);
-        alert("導入成功")
+        message.value = "導入成功"
         router.push("/project/"+projectUUID+"/teacher")
     }
 

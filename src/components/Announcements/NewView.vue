@@ -66,6 +66,7 @@
                 </div>
             </div>
         </form>
+        <AlertBlock :message="message" />
     </div>
 </template>
 
@@ -149,6 +150,7 @@
     import { useRouter } from "vue-router";
     import { ref } from "vue"
 
+    const message = ref("")
     const context = ref("")
     const title = ref("")
     const router = useRouter()
@@ -156,7 +158,7 @@
 
     async function submitEvent() {
         if (title.value == "") {
-            alert("標題不能為空")
+            message.value = "標題不能為空"
             return
         }
         const resp = await newAnnouncement(projectUUID, title.value, context.value)

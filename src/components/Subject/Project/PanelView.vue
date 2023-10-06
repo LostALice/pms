@@ -29,7 +29,6 @@
                     </div>
                 </div>
                 <div class="table-responsive table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
-
                     <EasyDataTable :headers="headers" :items="items" :search-value="searchValue" show-index table-class-name="customize-table">
                         <template #item-name="item">
                             <router-link :to="`/project/info/${$router.currentRoute.value.params.subjectID}`">{{ item.name }}</router-link>
@@ -49,7 +48,6 @@
                         <template #item-assignment="item">
                             <router-link :to="`/project/${item.projectID}/assignment`">{{ item.assignment }}</router-link>
                         </template>
-
                         <template #item-operation="item">
                             <div class="btn-group" role="group">
                                 <button class="btn btn-primary shadow-none" style="background: #e74a3b;" @click="deleteItem(item)">
@@ -58,10 +56,10 @@
                             </div>
                         </template>
                     </EasyDataTable>
-
                 </div>
             </div>
         </div>
+        <AlertBlock :message="message" />
     </div>
 </template>
 
@@ -73,7 +71,7 @@
 
     const searchValue = ref("");
     const items = ref([])
-
+    const message = ref("")
     const router = useRouter()
     const subjectUUID = router.currentRoute.value.params.subjectID
 
@@ -127,7 +125,7 @@
 
     async function deleteItem(item) {
         if (items.value.length == 1) {
-            alert("至少保留一個項目或刪除整個專案")
+            message.value = "至少保留一個項目或刪除整個專案"
             return
         }
         if (!confirm("確定刪除項目？")) {

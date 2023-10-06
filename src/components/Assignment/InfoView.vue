@@ -85,8 +85,8 @@
                 </div>
             </div>
         </div>
-
         <SubmitView />
+        <AlertBlock :message="message" />
     </div>
 </template>
 
@@ -100,6 +100,7 @@
     import { ref, onMounted } from "vue"
     import "vue3-easy-data-table";
 
+    const message = ref("")
     const name = ref("")
     const group = ref("")
     const mark = ref("")
@@ -152,17 +153,17 @@
     function markScore() {
         const marks = parseInt(prompt("分數","1-100"))
         if (!marks) {
-            alert("輸入錯誤")
+            MessageChannel.value = "輸入錯誤"
             markScore()
         }
         if (marks <= 0 || marks > 100) {
-            alert("輸入錯誤")
+            message.value = "輸入錯誤"
             markScore()
         }
         if (confirm("提交分數後學生不能再提交作業\n是否確定?")) {
             markAssignmentScore(assignmentUUID, projectUUID, marks)
             mark.value = marks
-            alert("提交成功")
+            message.value = "提交成功"
         }
     }
 

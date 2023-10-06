@@ -154,20 +154,20 @@ const routes = [
     {
         path: "/404",
         name: "404 Not Found",
-        component: () => import("@/components/404.vue"),
+        component: () => import("@/components/404View.vue"),
     },
     // 403 page
     {
         path: "/403",
         name: "403 Forbidden",
-        component: () => import("@/components/403.vue"),
+        component: () => import("@/components/403View.vue"),
     },
     // 404
     {
         path: "/:pathMatch(.*)*",
         redirect: "/404",
         name: "Error",
-        component: () => import("@/components/404.vue"),
+        component: () => import("@/components/404View.vue"),
     },
 ]
 

@@ -75,6 +75,7 @@
                 </form>
             </div>
         </div>
+        <AlertBlock :message="message" />
     </div>
 </template>
 
@@ -83,6 +84,7 @@
     import { useRouter } from "vue-router"
     import { ref } from "vue"
 
+    const message = ref("")
     const projectName = ref("")
     const year = ref("")
     const startDate = ref("")
@@ -94,6 +96,7 @@
 
     async function submitForm() {
         if (!projectName.value || !year.value || !startDate.value || !endDate.value || !settlementStartDate.value || !settlementEndDate.value) {
+            message.value = "未填必需項目"
             return
         }
         await createSubject(

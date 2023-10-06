@@ -30,7 +30,6 @@
                 </div>
             </div>
         </div>
-
         <div class="col-lg">
             <div class="row">
                 <div class="col">
@@ -83,6 +82,7 @@
                 </div>
             </div>
         </div>
+        <AlertBlock :message="message" />
     </div>
 </template>
 
@@ -97,18 +97,28 @@
     const oldPassword = ref("")
     const confirmPassword = ref("")
     const imageURL = ref("")
+    const message = ref("")
 
-    let file = ref()
+    const file = ref()
 
     onMounted(async () => {
         imageURL.value = await getProfileIconImage()
     })
 
     async function uploadImage() {
+        console.log(file.value);
+        if (file.value == undefined) {
+            message.value = "沒有選取圖片"
+            return
+        }
         changeIcon(file.value, file.value.name)
     }
 
     function changeImage(event) {
+        if (file.value == undefined) {
+            message.value = "沒有選取圖片"
+            return
+        }
         file.value = event.target.files[0]
 
         if (file.value) {
@@ -118,28 +128,28 @@
 
     async function changePassword() {
         if (newPassword.value != confirmPassword.value) {
-            alert("密碼不一致")
+            message.value = "密碼不一致"
             newPassword.value = ""
             oldPassword.value = ""
             confirmPassword.value = ""
             return
         }
         if (newPassword.value == "") {
-            alert("新密碼不能為空")
+            message.value = "新密碼不能為空"
             newPassword.value = ""
             oldPassword.value = ""
             confirmPassword.value = ""
             return
         }
         if (oldPassword.value == "") {
-            alert("舊密碼不能為空")
+            message.value = "舊密碼不能為空"
             newPassword.value = ""
             oldPassword.value = ""
             confirmPassword.value = ""
             return
         }
         if (oldPassword.value == newPassword.value) {
-            alert("密碼不能為一致")
+            message.value = "密碼不能為一致"
             newPassword.value = ""
             oldPassword.value = ""
             confirmPassword.value = ""
@@ -147,7 +157,7 @@
         }
         for (const i of [newPassword.value, newPassword.value, oldPassword.value]) {
             if (i.length < 8) {
-                alert("密碼至少8個字元以上")
+                message.value = "密碼至少8個字元以上"
                 newPassword.value = ""
                 oldPassword.value = ""
                 confirmPassword.value = ""
@@ -172,14 +182,14 @@
         const status_code = await changePassword_(oldHash_password, newHash_password)
         if (status_code.status_code == 200) {
             localStorage.clear()
-            router.go("/login")
+            router.replace("/login")
             return
         }
         if (status_code.status_code == 400) {
             newPassword.value = ""
             oldPassword.value = ""
             confirmPassword.value = ""
-            alert("密碼不正確")
+            message.value = "密碼不正確"
             return
         }
     }

@@ -100,6 +100,7 @@
                 </div>
             </div>
         </div>
+        <AlertBlock :message="message" />
     </div>
 </template>
 
@@ -112,6 +113,7 @@
     const router = useRouter()
     const projectUUID = router.currentRoute.value.params.projectID
     const groupName = ref("")
+    const message = ref("")
 
     const teacherSearchValue = ref("")
     const studentSearchValue = ref("")
@@ -156,7 +158,7 @@
 
     async function saveGroup() {
         if (teacherSelected.value == []) {
-            alert("必須選擇至少一名教授")
+            message.value = "必須選擇至少一名教授"
         }
         if (!groupName.value) {
             return

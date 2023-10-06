@@ -37,7 +37,6 @@
 
             </div>
         </nav>
-
         <div class="d-flex flex-column" id="content-wrapper">
             <div id="content" class="scrollbar scrollbar-primary">
                 <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
@@ -92,14 +91,16 @@
                 </div>
             </footer>
         </div>
+        <AlertBlock :message="message" />
     </div>
 </template>
 
 <script setup>
     import { verifyLoginTimeout, getProfileIconImage } from "@/assets/js/helper.js"
-    import { watch, ref, onMounted } from "vue"
+    import { watch, ref, onBeforeMount } from "vue"
     import { useRouter } from "vue-router"
 
+    const message = ref("")
     const FixedTop = ref(false)
     const nid = localStorage["nid"]
     const imageURL = ref("")
@@ -113,7 +114,7 @@
 
         if (timeout == false) {
             router.replace("/login")
-            alert("Timeout: Token Expired")
+            message.value = "連線逾時"
         }
 
         const sp_page = ["/", "/login", "/404", "/403"]
@@ -126,7 +127,7 @@
         immediate: true, deep: true
     },)
 
-    onMounted(async () => {
+    onBeforeMount(async () => {
         imageURL.value = await getProfileIconImage()
     })
 
