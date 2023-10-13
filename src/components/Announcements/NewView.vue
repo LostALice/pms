@@ -130,7 +130,7 @@
                 let cursorPositionEnd = textarea.selectionEnd
                 let textLength = textarea.value.length
                 textarea.value = textarea.value.substring(0, cursorPositionStart) +
-                    `<a href="${textarea.value.substring(cursorPositionStart, cursorPositionEnd)}">${textarea.value.substring(cursorPositionStart, cursorPositionEnd)}</a> ` +
+                    `<a href="${textarea.value.substring(cursorPositionStart, cursorPositionEnd)}" target="_blank">${textarea.value.substring(cursorPositionStart, cursorPositionEnd)}</a> ` +
                     textarea.value.substring(cursorPositionEnd, textLength);
                 this.$refs.ta.focus()
             },
@@ -166,6 +166,6 @@
         if (resp.status_code == 200) {
             router.push(`/project/${projectUUID}/announcement`)
         }
-        router.go(-1)
+        router.push(`/project/${projectUUID}/announcement`)
     }
 </script>

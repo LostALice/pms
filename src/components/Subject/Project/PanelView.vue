@@ -7,7 +7,7 @@
                         <p class="text-primary m-0 fw-bold" style="font-size: 28px;">{{ $route.name }}</p>
                     </div>
                     <div class="col-md-6 text-md-end dataTables_filter mt-1">
-                        <div class="btn-group" role="group">
+                        <div class="btn-group" role="group" v-if="permissionLevel>1">
                             <router-link :to="`${$route.path}/new`" class="btn btn-primary btn-sm d-none d-sm-inline-block shadow-none" role="button">
                                 <i class="fas fa-plus-circle fa-sm text-white-50"></i>
                                 新增
@@ -48,7 +48,7 @@
                         <template #item-assignment="item">
                             <router-link :to="`/project/${item.projectID}/assignment`">{{ item.assignment }}</router-link>
                         </template>
-                        <template #item-operation="item">
+                        <template #item-operation="item" v-if="permissionLevel>1">
                             <div class="btn-group" role="group">
                                 <button class="btn btn-primary shadow-none" style="background: #e74a3b;" @click="deleteItem(item)">
                                     <i class="icon ion-android-delete"></i>
@@ -69,9 +69,11 @@
     import "vue3-easy-data-table";
     import { ref, onMounted } from "vue";
 
+    const permissionLevel = ref(localStorage["permissionLevel"])
     const searchValue = ref("");
-    const items = ref([])
     const message = ref("")
+    const items = ref([])
+
     const router = useRouter()
     const subjectUUID = router.currentRoute.value.params.subjectID
 
@@ -106,12 +108,15 @@
             value: "assignment",
             sortable: true
         },
-        {
+    ]
+
+    if (permissionLevel.value > 1) {
+        headers.value.push({
             text: "選項",
             value: "operation",
             sortable: true
-        },
-    ];
+        })
+    }
 
     onMounted(async () =>{
         const data = await getProject(subjectUUID)

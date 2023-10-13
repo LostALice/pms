@@ -97,23 +97,27 @@
 
 <script setup>
     import { verifyLoginTimeout, getProfileIconImage } from "@/assets/js/helper.js"
-    import { watch, ref, onBeforeMount } from "vue"
     import { useRouter } from "vue-router"
+    import { watch, ref } from "vue"
 
-    const message = ref("")
+    const nid = ref(localStorage["nid"])
     const FixedTop = ref(false)
-    const nid = localStorage["nid"]
     const imageURL = ref("")
+    const message = ref("")
 
     const router = useRouter()
     watch(() => router.currentRoute.value.path, async (path) => {
+        nid.value = localStorage["nid"]
+
+        imageURL.value = await getProfileIconImage()
         if (path == "/" || path == "/login") {
             return
         }
-        let timeout = await verifyLoginTimeout()
+        const timeout = await verifyLoginTimeout()
 
-        if (timeout == false) {
+        if (timeout.timeout == true) {
             router.replace("/login")
+            alert("連線逾時")
             message.value = "連線逾時"
         }
 
@@ -126,10 +130,6 @@
     }, {
         immediate: true, deep: true
     },)
-
-    onBeforeMount(async () => {
-        imageURL.value = await getProfileIconImage()
-    })
 
     function logout() {
         localStorage.clear()

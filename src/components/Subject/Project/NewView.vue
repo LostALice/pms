@@ -40,13 +40,15 @@
 
     const projectName = ref("")
     const router = useRouter()
+    const message = ref("")
 
     const subjectUUID = router.currentRoute.value.params.subjectID
-    console.log(subjectUUID);
 
     async function submitForm() {
-        if (!projectName.value) return
-        console.log(projectName.value)
+        if (!projectName.value) {
+            message.value = "名稱不能為空"
+            return
+        }
         await createProject(
             subjectUUID,
             projectName.value,

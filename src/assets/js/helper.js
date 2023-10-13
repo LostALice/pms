@@ -21,20 +21,27 @@ export function getJWTToken() {
     }
 }
 
+export async function getPermissionLevel() {
+    const nid = localStorage["nid"]
+    const token = localStorage["token"]
+
+    const resp = await axios.get(`/getPermissionLevel/${nid}/${token}`)
+    localStorage["permissionLevel"] = resp.data
+}
+
 export async function verifyLoginTimeout() {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
     if (nid == null || token == null || nid == "" || token == "") return false
 
-    let resp = await axios.post("/TimeoutStatus", null, {
+    const resp = await axios.post("/TimeoutStatus", null, {
         params: {
             "nid": nid,
             "token": token,
         }
     })
-
-    return resp.data.timeout
+    return resp.data
 }
 
 export async function getSubjectData() {
@@ -334,7 +341,7 @@ export async function importStudent(projectUUID, file_) {
     let xlsxData = new FormData();
     xlsxData.append("file_", file_);
 
-    const resp = await axios.post("/importStudent" ,xlsxData , {
+    const resp = await axios.post("/importStudent", xlsxData, {
         params: {
             "nid": nid,
             "token": token,
@@ -434,7 +441,7 @@ export async function importTeacher(projectUUID, file_) {
     let xlsxData = new FormData();
     xlsxData.append("file_", file_);
 
-    const resp = await axios.post("/importTeacher" ,xlsxData , {
+    const resp = await axios.post("/importTeacher", xlsxData, {
         params: {
             "nid": nid,
             "token": token,

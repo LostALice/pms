@@ -143,7 +143,6 @@
     onMounted(async () => {
         const teacherList = await getGroupTeacherData(projectUUID)
         const studentList = await getGroupStudentData(projectUUID)
-
         if (!Array.isArray(teacherList)) {
             return
         }
@@ -157,14 +156,15 @@
 
 
     async function saveGroup() {
-        if (teacherSelected.value == []) {
-            message.value = "必須選擇至少一名教授"
+        if (JSON.parse(JSON.stringify(studentSelected.value)) == []) {
+            message.value = "必須選擇至少一名學生"
+            return
         }
         if (!groupName.value) {
+            message.value = "沒有組別名稱"
             return
         }
         const GID = await getGroupToken()
-        console.log(GID);
         for (const i of teacherSelected.value) {
             newGroup(projectUUID, i.nid, groupName.value, GID.GID)
         }

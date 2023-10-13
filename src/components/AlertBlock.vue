@@ -11,7 +11,7 @@
 <script setup>
     import { ref, defineProps, onUpdated } from "vue";
 
-    const props = defineProps({
+    let props = defineProps({
         message: String
     })
 

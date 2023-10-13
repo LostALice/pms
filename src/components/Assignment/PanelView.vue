@@ -7,7 +7,7 @@
                         <p class="text-primary m-0 fw-bold" style="font-size: 28px;">{{ $route.name }}</p>
                     </div>
                     <div class="col-md-6 text-md-end dataTables_filter mt-1">
-                        <div class="btn-group" role="group">
+                        <div class="btn-group" role="group" v-if="permissionLevel>1">
                             <router-link :to="`${$route.path}/new`" class="btn btn-primary btn-sm d-none d-sm-inline-block shadow-none" role="button">
                                 <i class="fas fa-plus-circle fa-sm text-white-50"></i>
                                 新增
@@ -29,24 +29,21 @@
                     </div>
                 </div>
                 <div class="table-responsive table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
-
                     <EasyDataTable :headers="headers" :items="items" table-class-name="customize-table" show-index>
                         <template #item-title="item">
                             <router-link :to="`${$route.path}/info/${item.assignmentUUID}`">{{ item.title }} </router-link>
                         </template>
-
-                        <template #item-operation="item">
+                        <template #item-operation="item" >
                             <div class="btn-group" role="group">
                                 <router-link class="btn btn-primary shadow-none" style="background: #23de7a;width: 42px;" :to="`${$route.path}/${item.assignmentUUID}/submit`">
                                     <i class="icon ion-android-upload"></i>
                                 </router-link>
-                                <button class="btn btn-primary shadow-none" style="background: #e74a3b;width: 42px;" @click="deleteItem(item)">
+                                <button class="btn btn-primary shadow-none" style="background: #e74a3b;width: 42px;" @click="deleteItem(item)" v-if="permissionLevel>1">
                                     <i class="icon ion-android-delete"></i>
                                 </button>
                             </div>
                         </template>
                     </EasyDataTable>
-
                 </div>
             </div>
         </div>
@@ -88,13 +85,17 @@
             value: "status",
             sortable: true
         },
-        {
+    ]
+
+    if (permissionLevel.value > 1) {
+        headers.value.push({
             text: "選項",
             value: "operation",
             sortable: true
-        },
-    ];
+        })
+    }
 
+    const permissionLevel = ref(localStorage["permissionLevel"])
     const items = ref([])
 
     onMounted(async () => {
