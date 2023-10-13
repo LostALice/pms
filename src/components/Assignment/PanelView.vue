@@ -88,7 +88,7 @@
     ]
 
     if (permissionLevel.value > 1) {
-        headers.value.push({
+        headers.push({
             text: "選項",
             value: "operation",
             sortable: true
