@@ -52,6 +52,11 @@
     import { ref, onMounted } from "vue";
     import "vue3-easy-data-table";
 
+    const router = useRouter()
+    const projectUUID = router.currentRoute.value.params.projectID
+    const permissionLevel = ref(localStorage["permissionLevel"])
+    const items = ref([])
+
     const headers = [
         {
             text: "標題",
@@ -77,10 +82,6 @@
             sortable: true
         })
     }
-
-    const items = ref([])
-    const projectUUID = useRouter().currentRoute.value.params.projectID
-    const permissionLevel = ref(localStorage["permissionLevel"])
 
     onMounted(async () => {
         const data = await getAnnouncementData(projectUUID)

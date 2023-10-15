@@ -54,9 +54,9 @@
     import { ref, onMounted } from "vue";
     import "vue3-easy-data-table";
 
+    const permissionLevel = ref(localStorage["permissionLevel"])
     const searchValue = ref("")
     const items = ref([])
-    const permissionLevel = ref(localStorage["permissionLevel"])
 
     const projectUUID = useRouter().currentRoute.value.params.projectID
 

@@ -125,9 +125,9 @@ const routes = [
         component: () => import("@/components/Subject/Project/NewView.vue"),
     },
     {
-            path: "/project/info/:subjectID",
-            name: "項目內容",
-            component: () => import("@/components/Subject/Project/InfoView.vue"),
+        path: "/project/info/:subjectID",
+        name: "項目內容",
+        component: () => import("@/components/Subject/Project/InfoView.vue"),
     },
     // Student page
     {
@@ -149,6 +149,21 @@ const routes = [
         path: "/project/:projectID/student/new",
         name: "新增學生",
         component: () => import("@/components/Student/NewView.vue"),
+    },
+    // Administration
+    {
+        path: "/admin",
+        redirect: "/admin/logging",
+    },
+    {
+        path: "/admin/logging",
+        name: "記錄",
+        component: () => import("@/components/Administration/LoggingView.vue"),
+    },
+    {
+        path: "/admin/password",
+        name: "更改密碼",
+        component: () => import("@/components/Administration/PasswordView.vue"),
     },
     // 404 page
     {

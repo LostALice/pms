@@ -37,6 +37,7 @@ export async function getPermissionLevel() {
 
     const resp = await axios.get(`/getPermissionLevel/${nid}/${token}`)
     localStorage["permissionLevel"] = resp.data
+    return resp.data
 }
 
 // subject
@@ -411,7 +412,7 @@ export async function getAssignmentInfo(projectUUID, assignmentUUID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.post(`/getAssignmentInfo/${nid}/${token}/${projectUUID}/${assignmentUUID}`)
+    const resp = await axios.get(`/getAssignmentInfo/${nid}/${token}/${projectUUID}/${assignmentUUID}`)
 
     return resp.data
 }
@@ -533,6 +534,32 @@ export async function getDeadlineProject() {
     const token = localStorage["token"]
 
     const resp = await axios.get(`/getDeadlineProject/${nid}/${token}`)
+
+    return resp.data
+}
+
+// Administration
+export async function getLog() {
+    const nid = localStorage["nid"]
+    const token = localStorage["token"]
+
+    const resp = await axios.get(`/getLogs/${nid}/${token}`)
+
+    return resp.data
+}
+
+export async function forceChangePassword(target_nid, password) {
+    const nid = localStorage["nid"]
+    const token = localStorage["token"]
+    console.log(target_nid, password)
+    const resp = await axios.post("/forceChangePassword", null, {
+        params: {
+            "nid": nid,
+            "token": token,
+            "target_nid": target_nid,
+            "password": password,
+        }
+    })
 
     return resp.data
 }

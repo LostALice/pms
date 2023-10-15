@@ -162,7 +162,6 @@
             return
         }
         const resp = await newAnnouncement(projectUUID, title.value, context.value)
-        console.log(resp);
         if (resp.status_code == 200) {
             router.push(`/project/${projectUUID}/announcement`)
         }

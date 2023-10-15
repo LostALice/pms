@@ -4,7 +4,7 @@
             <div class="error mx-auto" data-text="404">
                 <p class="m-0">404</p>
             </div>
-            <p class="text-dark mb-5 lead">Page Not Found</p><router-link to="/" replace>← Back to Dashboard</router-link>
+            <p class="text-dark mb-5 lead">Page Not Found</p><router-link to="/dashboard" replace>← Back to Dashboard</router-link>
         </div>
     </div>
 </template>

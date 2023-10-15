@@ -31,8 +31,8 @@
 
     const hashPassword = ref("")
     const password = ref("")
-    const nid = ref("")
     const message = ref("")
+    const nid = ref("")
 
     const router = useRouter()
 

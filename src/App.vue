@@ -34,7 +34,6 @@
                     </li>
                 </ul>
                 <hr class="sidebar-divider my-0">
-
             </div>
         </nav>
         <div class="d-flex flex-column" id="content-wrapper">
@@ -51,16 +50,28 @@
                                     <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
                                         <router-link class="dropdown-item" to="/profile">
                                             <i class="fas fa-user fa-sm fa-fw me-2 text-gray-400">
-                                            </i>&nbsp;個人資料
+                                            </i>個人資料
                                         </router-link>
-
                                         <div class="dropdown-divider">
                                         </div>
-
                                         <a class="dropdown-item" @click="logout">
-                                            <i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>
-                                            &nbsp;登出
+                                            <i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400">
+                                            </i>登出
                                         </a>
+                                        <div v-if="permissionLevel>=3">
+                                            <div class="dropdown-divider alert-warning">
+                                            </div>
+                                            <router-link class="dropdown-item alert-warning" to="/admin/logging">
+                                                <i class="icon ion-locked">
+                                                </i>&nbsp;&nbsp;Loggings
+                                            </router-link>
+                                            <div class="dropdown-divider alert-warning">
+                                            </div>
+                                            <router-link class="dropdown-item alert-warning" to="/admin/password">
+                                                <i class="icon ion-locked">
+                                                </i>&nbsp;&nbsp;Force Change Password
+                                            </router-link>
+                                        </div>
                                     </div>
                                 </div>
                             </li>
@@ -104,6 +115,7 @@
     const FixedTop = ref(false)
     const imageURL = ref("")
     const message = ref("")
+    const permissionLevel = ref(localStorage["permissionLevel"])
 
     const router = useRouter()
     watch(() => router.currentRoute.value.path, async (path) => {

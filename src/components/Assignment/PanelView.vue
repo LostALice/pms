@@ -58,6 +58,9 @@
 
     const router = useRouter()
     const projectUUID = router.currentRoute.value.params.projectID
+    const permissionLevel = ref(localStorage["permissionLevel"])
+    const items = ref([])
+
 
     const headers = [
         {
@@ -94,9 +97,6 @@
             sortable: true
         })
     }
-
-    const permissionLevel = ref(localStorage["permissionLevel"])
-    const items = ref([])
 
     onMounted(async () => {
         const data = await getAssignment(projectUUID)

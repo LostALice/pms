@@ -37,29 +37,29 @@
                         <div class="card-header py-3">
                             <p class="text-primary m-0 fw-bold" style="font-size: 28px;">更改密碼</p>
                         </div>
-                            <form>
-                                <input
-                                    type="text"
-                                    name="email"
-                                    value="..."
-                                    autocomplete="username email"
-                                    style="display: none;"
-                                    >
-                                <div class="card-body">
-                                    <div class="mb-3">
-                                        <label class="form-label">
-                                            <strong>舊密碼</strong>
-                                        </label>
-                                        <input v-model="oldPassword" class="form-control shadow-none" type="password" autocomplete="current-password" show="*" minlength="8" maxlength="50" required="">
+                        <form>
+                            <input
+                                type="text"
+                                name="email"
+                                value="..."
+                                autocomplete="username email"
+                                style="display: none;"
+                            >
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        <strong>舊密碼</strong>
+                                    </label>
+                                    <input v-model="oldPassword" class="form-control shadow-none" type="password" autocomplete="current-password" show="*" minlength="8" maxlength="50" required="">
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <label class="form-label">
+                                                <strong>新密碼</strong>
+                                            </label>
+                                        <input v-model="newPassword" class="form-control shadow-none" autocomplete="new-password" show="*" type="password" minlength="8" maxlength="50" required="">
                                     </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="mb-3">
-                                                <label class="form-label">
-                                                    <strong>新密碼</strong>
-                                                </label>
-                                            <input v-model="newPassword" class="form-control shadow-none" autocomplete="new-password" show="*" type="password" minlength="8" maxlength="50" required="">
-                                        </div>
                                     </div>
                                     <div class="col">
                                         <div class="mb-3">
@@ -127,13 +127,6 @@
     }
 
     async function changePassword() {
-        if (newPassword.value != confirmPassword.value) {
-            message.value = "密碼不一致"
-            newPassword.value = ""
-            oldPassword.value = ""
-            confirmPassword.value = ""
-            return
-        }
         if (newPassword.value == "") {
             message.value = "新密碼不能為空"
             newPassword.value = ""
@@ -148,14 +141,28 @@
             confirmPassword.value = ""
             return
         }
-        if (oldPassword.value == newPassword.value) {
-            message.value = "密碼不能為一致"
+        if (confirmPassword.value == "") {
+            message.value = "舊密碼不能為空"
             newPassword.value = ""
             oldPassword.value = ""
             confirmPassword.value = ""
             return
         }
-        for (const i of [newPassword.value, newPassword.value, oldPassword.value]) {
+        if (oldPassword.value == newPassword.value) {
+            message.value = "新密碼不能與舊密碼一致"
+            newPassword.value = ""
+            oldPassword.value = ""
+            confirmPassword.value = ""
+            return
+        }
+        if (newPassword.value != confirmPassword.value) {
+            message.value = "密碼不一致"
+            newPassword.value = ""
+            oldPassword.value = ""
+            confirmPassword.value = ""
+            return
+        }
+        for (const i of [newPassword.value, confirmPassword.value, oldPassword.value]) {
             if (i.length < 8) {
                 message.value = "密碼至少8個字元以上"
                 newPassword.value = ""

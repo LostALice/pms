@@ -4,7 +4,7 @@
             <div class="error mx-auto" data-text="403">
                 <p class="m-0">403</p>
             </div>
-            <p class="text-dark mb-5 lead">Forbidden</p><router-link to="/" replace>← Back to Dashboard</router-link>
+            <p class="text-dark mb-5 lead">Forbidden</p><router-link to="/dashboard" replace>← Back to Dashboard</router-link>
         </div>
     </div>
 </template>
