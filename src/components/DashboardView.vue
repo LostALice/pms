@@ -10,7 +10,7 @@
                         <div class="row align-items-center no-gutters">
                             <div class="col me-2">
                                 <div class="text-uppercase text-primary fw-bold mb-1"><span>作業名稱</span></div>
-                                <div class="text-dark fw-bold h5 mb-0" v-if="deadlineProject == []">
+                                <div class="text-dark fw-bold h5 mb-0" v-if="deadlineProject.length > 0">
                                     <router-link :to="`/project/${deadlineProject.PROJECT_ID}/assignment`">
                                         <span class="alert-warning">{{ deadlineProject.NAME }}</span>
                                     </router-link>
@@ -19,7 +19,7 @@
                                     <span>沒有作業</span>
                                 </div>
                             </div>
-                            <div class="col me-2" v-if="deadlineProject == []">
+                            <div class="col me-2" v-if="deadlineProject.length > 0">
                                 <div class="text-uppercase text-primary fw-bold mb-1"><span>作業截止日期</span></div>
                                 <div class="text-dark fw-bold h5 mb-0">
                                     <span>{{ deadlineProject.SUBMISSION_DATE }}</span>
@@ -38,7 +38,7 @@
             </div>
         </div>
         <hr>
-        <div class="row" v-if="deadlineProject == []">
+        <div class="row" v-if="deadlineProject.length > 0">
             <div class="col">
                 <div class="card shadow my-3">
                     <div class="card-header py-3">
