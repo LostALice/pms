@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-    import { ref, defineProps, onUpdated } from "vue";
+    import { ref, onUpdated } from "vue";
 
     let props = defineProps({
         message: String

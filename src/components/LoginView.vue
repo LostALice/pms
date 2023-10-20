@@ -45,10 +45,6 @@
             message.value = "請輸入密碼"
             return
         }
-        if (!nid.value.match(/^[dtDT]\d{7}$/)) {
-            message.value = "NID 格式錯誤"
-            return
-        }
 
         nid.value = nid.value.toUpperCase()
         const encoder = new TextEncoder()
