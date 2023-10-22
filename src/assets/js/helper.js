@@ -1,13 +1,18 @@
 // Code by AkinoAlice@Tyrant_Rex
 
+import CryptoJS from "crypto-js"
 import axios from "axios"
-axios.defaults.baseURL = "http://localhost:8000"
 
-export async function getProfileIconImage() {
-    const nid = localStorage["nid"]
-    const token = localStorage["token"]
+if (process.env.API_BASE_URL) {
+    axios.defaults.baseURL = process.env.API_BASE_URL
+}
+else {
+    axios.defaults.baseURL = "http://192.168.213.97:8000"
+}
 
-    return `${axios.defaults.baseURL}/getIconImages/${nid}/${token}`
+export function HashSHA256(str) {
+    const hash = CryptoJS.SHA256(str)
+    return hash.toString(CryptoJS.enc.Hex)
 }
 
 export function getJWTToken() {
@@ -21,13 +26,24 @@ export function getJWTToken() {
     }
 }
 
+export async function getProfileIconImage() {
+    const nid = localStorage["nid"]
+
+    return `${axios.defaults.baseURL}/getIconImages/${nid}`
+}
+
 export async function verifyLoginTimeout() {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
     if (nid == null || token == null || nid == "" || token == "") return false
 
-    const resp = await axios.get(`/TimeoutStatus/${nid}/${token}`)
+    const resp = await axios.get("/TimeoutStatus", {
+        params: {
+            "nid": nid,
+            "token": token,
+        }
+    })
     return resp.data
 }
 
@@ -35,7 +51,12 @@ export async function getPermissionLevel() {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.get(`/getPermissionLevel/${nid}/${token}`)
+    const resp = await axios.get("/getPermissionLevel", {
+        params: {
+            "nid": nid,
+            "token": token,
+        }
+    })
     localStorage["permissionLevel"] = resp.data
     return resp.data
 }
@@ -72,7 +93,12 @@ export async function getSubject() {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.get(`/getSubject/${nid}/${token}`)
+    const resp = await axios.get("/getSubject",{
+        params: {
+            "nid": nid,
+            "token": token,
+        }
+    })
 
     return resp.data
 }
@@ -81,7 +107,13 @@ export async function deleteSubject(subjectUUID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.delete(`/deleteSubject/${nid}/${token}/${subjectUUID}`)
+    const resp = await axios.delete("/deleteSubject", {
+        data: {
+            "nid": nid,
+            "token": token,
+            "subjectUUID": subjectUUID
+        }
+    })
 
     return resp.data
 }
@@ -91,7 +123,13 @@ export async function getProject(subjectUUID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.get(`/getProject/${nid}/${token}/${subjectUUID}`)
+    const resp = await axios.get("/getProject", {
+        params: {
+            "nid": nid,
+            "token": token,
+            "subjectUUID": subjectUUID
+        }
+    })
 
     return resp.data
 }
@@ -116,7 +154,13 @@ export async function deleteProject(projectUUID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.delete(`/deleteProject/${nid}/${token}/${projectUUID}`)
+    const resp = await axios.delete("/deleteProject",{
+        data: {
+            "nid": nid,
+            "token": token,
+            "projectUUID": projectUUID,
+        }
+    })
 
     return resp.data
 }
@@ -125,7 +169,13 @@ export async function getProjectInfo(projectUUID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.get(`/getProjectInfo/${nid}/${token}/${projectUUID}`)
+    const resp = await axios.get("/getProjectInfo", {
+        params: {
+            "nid": nid,
+            "token": token,
+            "projectUUID": projectUUID,
+        }
+    })
 
     return resp.data
 }
@@ -135,7 +185,13 @@ export async function getAnnouncementData(projectUUID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.get(`/getAnnouncementData/${nid}/${token}/${projectUUID}`)
+    const resp = await axios.get("/getAnnouncementData", {
+        params: {
+            "nid": nid,
+            "token": token,
+            "projectUUID": projectUUID,
+        }
+    })
 
     return resp.data
 }
@@ -161,7 +217,13 @@ export async function getAnnouncementInfo(announcementUUID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.get(`/getAnnouncementInfo/${nid}/${token}/${announcementUUID}`)
+    const resp = await axios.get("/getAnnouncementInfo", {
+        params: {
+            "nid": nid,
+            "token": token,
+            "announcementUUID": announcementUUID,
+        }
+    })
 
     return resp.data
 }
@@ -170,7 +232,14 @@ export async function deleteAnnouncement(projectUUID, announcementUUID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.delete(`/deleteAnnouncement/${nid}/${token}/${projectUUID}/${announcementUUID}`)
+    const resp = await axios.delete("/deleteAnnouncement", {
+        data: {
+            "nid": nid,
+            "token": token,
+            "projectUUID": projectUUID,
+            "announcementUUID": announcementUUID
+        }
+    })
 
     return resp.data
 }
@@ -180,7 +249,13 @@ export async function getStudentData(projectUUID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.get(`/getStudentData/${nid}/${token}/${projectUUID}`)
+    const resp = await axios.get("/getStudentData", {
+        params: {
+            "nid": nid,
+            "token": token,
+            "projectUUID": projectUUID,
+        }
+    })
 
     return resp.data
 }
@@ -189,7 +264,13 @@ export async function getStudentList(projectUUID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.get(`/getStudentList/${nid}/${token}/${projectUUID}`)
+    const resp = await axios.get("/getStudentList", {
+        params: {
+            "nid": nid,
+            "token": token,
+            "projectUUID": projectUUID
+        }
+    })
 
     return resp.data
 }
@@ -214,7 +295,11 @@ export async function getStudentInfo(studentNID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.get(`/getStudentInfo/${nid}/${token}/${studentNID}`)
+    const resp = await axios.get("/getStudentInfo", {
+        "nid": nid,
+        "token": token,
+        "studentNID": studentNID
+    })
 
     return resp.data
 }
@@ -223,7 +308,14 @@ export async function deleteStudent(studentNID, projectUUID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.delete(`/deleteStudent/${nid}/${token}/${studentNID}/${projectUUID}`)
+    const resp = await axios.delete("/deleteStudent", {
+        params: {
+            "nid": nid,
+            "token": token,
+            "studentNID": studentNID,
+            "projectUUID": projectUUID
+        }
+    })
 
     return resp.data
 }
@@ -251,7 +343,13 @@ export async function getTeacherData(projectUUID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.get(`/getTeacherData/${nid}/${token}/${projectUUID}`)
+    const resp = await axios.get("/getTeacherData", {
+        params: {
+            "nid": nid,
+            "token": token,
+            "projectUUID": projectUUID
+        }
+    })
 
     return resp.data
 }
@@ -260,7 +358,13 @@ export async function getTeacherList(projectUUID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.get(`/getTeacherList/${nid}/${token}/${projectUUID}`)
+    const resp = await axios.get("/getTeacherList", {
+        params: {
+            "nid": nid,
+            "token": token,
+            "projectUUID": projectUUID
+        }
+    })
 
     return resp.data
 }
@@ -285,7 +389,11 @@ export async function getTeacherInfo(teacherNID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.get(`/getTeacherInfo/${nid}/${token}/${teacherNID}`)
+    const resp = await axios.get("/getTeacherInfo", {
+        "nid": nid,
+        "token": token,
+        "teacherNID": teacherNID
+    })
 
     return resp.data
 }
@@ -294,7 +402,14 @@ export async function deleteTeacher(teacherNID, projectUUID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.delete(`/deleteTeacher/${nid}/${token}/${teacherNID}/${projectUUID}`)
+    const resp = await axios.delete("/deleteTeacher", {
+        data: {
+            "nid": nid,
+            "token": token,
+            "teacherNID": teacherNID,
+            "projectUUID": projectUUID
+        }
+    })
 
     return resp.data
 }
@@ -322,7 +437,13 @@ export async function getGroupData(projectUUID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.get(`/getGroupData/${nid}/${token}/${projectUUID}`)
+    const resp = await axios.get("/getGroupData", {
+        params: {
+            "nid": nid,
+            "token": token,
+            "projectUUID": projectUUID
+        }
+    })
 
     return resp.data
 }
@@ -331,7 +452,13 @@ export async function getGroupInfo(groupUUID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.get(`/getGroupInfo/${nid}/${token}/${groupUUID}`)
+    const resp = await axios.get("/getGroupInfo/", {
+        params: {
+            "nid": nid,
+            "token": token,
+            "groupUUID": groupUUID
+        }
+    })
 
     return resp.data
 }
@@ -340,7 +467,13 @@ export async function getGroupTeacherData(projectUUID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.get(`/getGroupTeacherData/${nid}/${token}/${projectUUID}`)
+    const resp = await axios.get("/getGroupTeacherData", {
+        params: {
+            "nid": nid,
+            "token": token,
+            "projectUUID": projectUUID,
+        }
+    })
 
     return resp.data
 }
@@ -349,7 +482,13 @@ export async function getGroupStudentData(projectUUID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.get(`/getGroupStudentData/${nid}/${token}/${projectUUID}`)
+    const resp = await axios.get("/getGroupStudentData", {
+        params: {
+            "nid": nid,
+            "token": token,
+            "projectUUID": projectUUID,
+        }
+    })
 
     return resp.data
 }
@@ -376,7 +515,12 @@ export async function getGroupToken() {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.get(`/getGroupToken/${nid}/${token}`)
+    const resp = await axios.get("/getGroupToken", {
+        params: {
+            "nid": nid,
+            "token": token,
+        }
+    })
 
     return resp.data
 }
@@ -385,7 +529,14 @@ export async function deleteGroup(GID, projectUUID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.delete(`/deleteGroup/${nid}/${token}/${GID}/${projectUUID}`)
+    const resp = await axios.delete("/deleteGroup", {
+        data: {
+            "nid": nid,
+            "token": token,
+            "GID": GID,
+            "projectUUID": projectUUID
+        }
+    })
 
     return resp.data
 }
@@ -394,7 +545,13 @@ export async function getAssignment(projectUUID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.get(`/getAssignment/${nid}/${token}/${projectUUID}`)
+    const resp = await axios.get("/getAssignment", {
+        params: {
+            "nid": nid,
+            "token": token,
+            "projectUUID": projectUUID
+        }
+    })
 
     return resp.data
 }
@@ -403,7 +560,14 @@ export async function deleteAssignment(assignmentUUID, projectUUID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.delete(`/deleteAssignment/${nid}/${token}/${projectUUID}/${assignmentUUID}`)
+    const resp = await axios.delete("/deleteAssignment", {
+        data: {
+            "nid": nid,
+            "token": token,
+            "assignmentUUID": assignmentUUID,
+            "projectUUID": projectUUID,
+        }
+    })
 
     return resp.data
 }
@@ -412,7 +576,14 @@ export async function getAssignmentInfo(projectUUID, assignmentUUID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.get(`/getAssignmentInfo/${nid}/${token}/${projectUUID}/${assignmentUUID}`)
+    const resp = await axios.get("/getAssignmentInfo", {
+        params: {
+            "nid": nid,
+            "token": token,
+            "projectUUID": projectUUID,
+            "assignmentUUID": assignmentUUID,
+        }
+    })
 
     return resp.data
 }
@@ -421,12 +592,13 @@ export async function downloadAssignment(projectUUID, taskUUID, fileID) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.post("/downloadAssignment", null, {
+    const resp = await axios.get("/downloadAssignment", {
         params: {
             "nid": nid,
             "token": token,
+            "fileID": fileID,
             "taskUUID": taskUUID,
-            "fileID": fileID
+            "projectUUID": projectUUID,
         },
         responseType: "blob",
     })
@@ -490,7 +662,15 @@ export async function deleteAssignmentItem(taskUUID, fileUUID, author) {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.delete(`/deleteAssignmentItem/${nid}/${token}/${taskUUID}/${fileUUID}/${author}`)
+    const resp = await axios.delete("/deleteAssignmentItem/", {
+        data: {
+            "nid": nid,
+            "token": token,
+            "taskUUID": taskUUID,
+            "fileUUID": fileUUID,
+            "author": author,
+        }
+    })
 
     return resp.data
 }
@@ -533,7 +713,12 @@ export async function getDeadlineProject() {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.get(`/getDeadlineProject/${nid}/${token}`)
+    const resp = await axios.get("/getDeadlineProject/", {
+        params: {
+            "nid": nid,
+            "token": token,
+        }
+    })
 
     return resp.data
 }
@@ -543,7 +728,12 @@ export async function getLog() {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.get(`/getLogs/${nid}/${token}`)
+    const resp = await axios.get("/getLogs", {
+        params: {
+            "nid": nid,
+            "token": token,
+        }
+    })
 
     return resp.data
 }

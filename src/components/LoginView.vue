@@ -16,7 +16,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <button @click="login_func" class="btn btn-primary d-block w-100" type="button">Login</button>
+                    <button @click="login_func" class="btn btn-primary d-block w-100" type="button">登入</button>
                 </div>
             </form>
         </section>
@@ -24,10 +24,11 @@
 </template>
 
 <script setup>
-    import { getJWTToken, getPermissionLevel } from "@/assets/js/helper.js"
+    import { getJWTToken, getPermissionLevel, HashSHA256 } from "@/assets/js/helper.js"
     import { useRouter } from "vue-router"
     import { ref, onMounted } from "vue"
     import axios from "axios"
+
 
     const hashPassword = ref("")
     const password = ref("")
@@ -47,12 +48,7 @@
         }
 
         nid.value = nid.value.toUpperCase()
-        const encoder = new TextEncoder()
-        const data = encoder.encode(password.value)
-        const hash = await crypto.subtle.digest("SHA-256", data)
-        const hash_array = Array.from(new Uint8Array(hash))
-        const hash_hex = hash_array.map((b) => b.toString(16).padStart(2, "0")).join("")
-        hashPassword.value = hash_hex
+        hashPassword.value = HashSHA256(password.value)
 
         const response = await axios.get(`/login/${nid.value}/${hashPassword.value}`)
         if (response.status !== 200) {

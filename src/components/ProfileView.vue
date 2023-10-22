@@ -87,7 +87,7 @@
 </template>
 
 <script setup>
-    import { changePassword_, getProfileIconImage, changeIcon } from "@/assets/js/helper.js"
+    import { changePassword_, getProfileIconImage, changeIcon, HashSHA256 } from "@/assets/js/helper.js"
     import { useRouter } from "vue-router"
     import { ref, onMounted } from "vue"
 
@@ -172,19 +172,9 @@
             }
         }
 
-        let newEncoder = new TextEncoder();
-        const newData = newEncoder.encode(newPassword.value);
-        const newHash = await crypto.subtle.digest("SHA-256", newData);
-        const newHash_array = Array.from(new Uint8Array(newHash));
-        const newHash_hex = newHash_array.map((b) => b.toString(16).padStart(2, "0")).join("");
-        const newHash_password = newHash_hex;
+        const newHash_password = HashSHA256(newPassword.value)
 
-        let oldEncoder = new TextEncoder();
-        const oldData = oldEncoder.encode(oldPassword.value);
-        const oldHash = await crypto.subtle.digest("SHA-256", oldData);
-        const oldHash_array = Array.from(new Uint8Array(oldHash));
-        const oldHash_hex = oldHash_array.map((b) => b.toString(16).padStart(2, "0")).join("");
-        const oldHash_password = oldHash_hex;
+        const oldHash_password = HashSHA256(oldPassword.value)
 
         const status_code = await changePassword_(oldHash_password, newHash_password)
         if (status_code.status_code == 200) {
