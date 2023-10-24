@@ -3,13 +3,6 @@
 import CryptoJS from "crypto-js"
 import axios from "axios"
 
-if (process.env.API_BASE_URL) {
-    axios.defaults.baseURL = process.env.API_BASE_URL
-}
-else {
-    axios.defaults.baseURL = "http://192.168.213.97:8000"
-}
-
 export function HashSHA256(str) {
     const hash = CryptoJS.SHA256(str)
     return hash.toString(CryptoJS.enc.Hex)
@@ -32,6 +25,32 @@ export async function getProfileIconImage() {
     return `${axios.defaults.baseURL}/getIconImages/${nid}`
 }
 
+export async function getPermissionLevel() {
+    const nid = localStorage["nid"]
+    const token = localStorage["token"]
+
+    const resp = await axios.get("/getPermissionLevel", {
+        params: {
+            "nid": nid,
+            "token": token,
+        }
+    })
+    localStorage["permissionLevel"] = resp.data
+    return resp.data
+}
+
+// login
+export async function verifyLogin(nid, hashPassword) {
+    const resp = await axios.get("/login/", {
+        params: {
+            "nid": nid,
+            "password": hashPassword
+        }
+    })
+
+    return resp.data
+}
+
 export async function verifyLoginTimeout() {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
@@ -47,17 +66,17 @@ export async function verifyLoginTimeout() {
     return resp.data
 }
 
-export async function getPermissionLevel() {
+export async function JWTValidate() {
     const nid = localStorage["nid"]
     const token = localStorage["token"]
 
-    const resp = await axios.get("/getPermissionLevel", {
+    const resp = await axios.get("/JWTValidation", {
         params: {
             "nid": nid,
             "token": token,
         }
     })
-    localStorage["permissionLevel"] = resp.data
+
     return resp.data
 }
 

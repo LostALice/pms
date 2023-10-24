@@ -24,11 +24,9 @@
 </template>
 
 <script setup>
-    import { getJWTToken, getPermissionLevel, HashSHA256 } from "@/assets/js/helper.js"
+    import { getJWTToken, getPermissionLevel, HashSHA256, JWTValidate, verifyLogin } from "@/assets/js/helper.js"
     import { useRouter } from "vue-router"
     import { ref, onMounted } from "vue"
-    import axios from "axios"
-
 
     const hashPassword = ref("")
     const password = ref("")
@@ -50,29 +48,30 @@
         nid.value = nid.value.toUpperCase()
         hashPassword.value = HashSHA256(password.value)
 
-        const response = await axios.get(`/login/${nid.value}/${hashPassword.value}`)
-        if (response.status !== 200) {
-            message.value = "伺服器內部錯誤：" + response.status
+        const response = await verifyLogin(nid.value, hashPassword.value)
+
+        if (response.status !== 200 || response.status !== 307) {
+            message.value = "伺服器內部錯誤：" + response
         }
 
         // Store jwt token to localStorage for future use
-        if (response.data.access) {
+        if (response.access) {
             localStorage["nid"] = nid.value.toLocaleUpperCase()
-            localStorage["token"] = response.data.token["x-access-token"]
+            localStorage["token"] = response.token["x-access-token"]
             await getPermissionLevel()
             router.replace("/dashboard")
         } else {
             message.value = "用戶名或密碼不正確"
+            alert("用戶名或密碼不正確")
             return
         }
     }
 
     onMounted(async () => {
-        axios.defaults.headers = { "Content-Type": "application/json", accept: "application/json" }
-
         if (getJWTToken()) {
-            const JWTValidation = await axios.get(`/JWTValidation/${localStorage["nid"]}/${localStorage["token"]}`)
-            if (JWTValidation.data.access){
+            const JWTValidation = await JWTValidate()
+
+            if (JWTValidation.access){
                 router.replace("/dashboard")
             }
             else {
