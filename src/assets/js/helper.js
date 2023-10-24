@@ -48,7 +48,7 @@ export async function verifyLogin(nid, hashPassword) {
         }
     })
 
-    return resp.data
+    return resp
 }
 
 export async function verifyLoginTimeout() {

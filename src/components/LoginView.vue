@@ -50,14 +50,15 @@
 
         const response = await verifyLogin(nid.value, hashPassword.value)
 
-        if (response.status !== 200 || response.status !== 307) {
+        if (response.status !== 200) {
+            console.log(response);
             message.value = "伺服器內部錯誤：" + response
         }
 
         // Store jwt token to localStorage for future use
-        if (response.access) {
+        if (response.data.access) {
             localStorage["nid"] = nid.value.toLocaleUpperCase()
-            localStorage["token"] = response.token["x-access-token"]
+            localStorage["token"] = response.data.token["x-access-token"]
             await getPermissionLevel()
             router.replace("/dashboard")
         } else {
